@@ -4,7 +4,7 @@ subtitle: The strange IMDB ratings of politically charged movies
 image: /img/inconvenient.png
 ---
 
-As a learning experience, I recreated this data visualization from FiveThirtyEight's article, [Al Gore’s New Movie Exposes The Big Flaw In Online Movie Ratings](https://fivethirtyeight.com/features/al-gores-new-movie-exposes-the-big-flaw-in-online-movie-ratings/).
+I recreated this data visualization from FiveThirtyEight's article, [Al Gore’s New Movie Exposes The Big Flaw In Online Movie Ratings](https://fivethirtyeight.com/features/al-gores-new-movie-exposes-the-big-flaw-in-online-movie-ratings/).
 
 ![](/img/inconvenient.png)
 
