@@ -1,9 +1,7 @@
 ---
 layout: page
-title: The most important information
-subtitle: Secondary information
+title: Daniel Martin-Alarcon
+subtitle: Data Scientist, Synthetic Biologist
 ---
 
-
-### my history
 
