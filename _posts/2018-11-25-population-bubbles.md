@@ -4,7 +4,7 @@ subtitle: Income and life expectancy around the world in 2018
 image: /img/bubbles.png
 ---
 
-As a learning experience, I recreated [ this data visualization from Gapminder](https://www.gapminder.org/downloads/updated-gapminder-world-poster-2015/).
+I recreated [ this data visualization from Gapminder](https://www.gapminder.org/downloads/updated-gapminder-world-poster-2015/).
 
 ![](/img/bubbles.png)
 
