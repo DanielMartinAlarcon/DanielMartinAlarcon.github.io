@@ -1,6 +1,6 @@
 ---
-title: The skewed IMDB ratings for An Inconvenient Sequel
-subtitle: I recreated this data visualization from FiveThirtyEight
+title: An Inconvenient Sequel
+subtitle: The strange IMDB ratings of politically charged movies
 image: /img/inconvenient.png
 ---
 
