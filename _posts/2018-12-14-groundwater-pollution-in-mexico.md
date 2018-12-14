@@ -1,6 +1,6 @@
 ---
-title: Groundwater Pollution in Mexico
-subtitle: Maps of groundwater sources that exceed EPA limits in Mexico
+title: Water Pollution in Mexico
+subtitle: Maps showing the distribution of trace elements in Mexican water sources
 image: /img/Mexican-water-quality/all_contaminants.png
 ---
 
