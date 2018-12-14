@@ -10,7 +10,7 @@ You can learn quite a few things by looking at the distribution of trace element
 
 In the maps below, I isolate each contaminant and also plot small gray plus signs for each of the sites in which the concentration of that element fell under the detection limit. The plus signs remind us that there are many clean water sources for each one that is contaminated. 
 
-Arsenic is one of the most widely distributed contaminants, appearing above the EPA limits in fully 68.3% of the surveyed sites (and above 10x the limit in 3.7%, as shown below). Its distribution roughly tracks the largest mountain ranges in the country, the Sierra Madre Occidental, which is a continuation of the American Rocky Mountains. The most arsenic-polluted sites are mostly wells, since arsenic contamination is mostly due to geological causes.
+Arsenic is one of the most widely distributed contaminants, appearing above the EPA limits in fully 68.3% of the surveyed sites (and above 10x the limit in 3.7%). Its distribution roughly tracks the largest mountain ranges in the country, the Sierra Madre Occidental, which is a continuation of the American Rocky Mountains. The most arsenic-polluted sites (>10x EPA) are mostly wells, since arsenic contamination is mostly due to geological causes, but arsenic also shows the widest range.  When we expand the view to everything above 1x EPA, there is ample arsenic contamination in rivers. 
 
 ![Arsenic](/img/Mexican-water-quality/arsenic.png)
 ![Arsenic Pie](/img/Mexican-water-quality/arsenic_pie.png)
