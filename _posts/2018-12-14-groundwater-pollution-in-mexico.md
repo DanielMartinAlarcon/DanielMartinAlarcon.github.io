@@ -4,7 +4,7 @@ subtitle: Maps of groundwater sources that exceed EPA limits in Mexico
 image: /img/Mexican-water-quality/all_contaminants.png
 ---
 
-![All contaminants](/img/Mexican-water-quality/groundwater1.png)
+![All contaminants](/img/Mexican-water-quality/all_contaminants.png)
 
 I recently came across a dataset of 
 
