@@ -1,9 +1,9 @@
 ---
 title: Programmable RNA-binding proteins
 subtitle: A PhD Thesis Project
-image: /img/pumby1.png
+image: /img/3_pumby/pumby1-cropped.png
 ---
-![](/img/pumby5.png)
+![](/img/3_pumby/pumby5.png)
 
 Much of modern bioengineering is based on tools that bind to important biomolecules and execute some useful behavior, preferably in living organisms. The most famous biotechnology of the last decade, [CRISPR](https://en.wikipedia.org/wiki/CRISPR), is based on a protein-RNA combination that can bind to (and therefore edit) specific sequences of DNA in the genome of basically anything.
 
