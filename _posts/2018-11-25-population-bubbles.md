@@ -1,12 +1,12 @@
 ---
 title: The World in Bubbles
 subtitle: Income and life expectancy around the world in 2018
-image: /img/bubbles.png
+image: /img/2_population-bubbles/bubbles-cropped.png
 ---
 
 I recreated [ this data visualization from Gapminder](https://www.gapminder.org/downloads/updated-gapminder-world-poster-2015/).
 
-![](/img/bubbles.png)
+![](/img/2_population-bubbles/bubbles.png)
 
 By recreating this graph, I practiced:
 - Pandas data wrangling
