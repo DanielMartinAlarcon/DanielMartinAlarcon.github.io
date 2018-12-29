@@ -25,6 +25,7 @@ I mentioned before that arsenic and fluoride (As and F) are known to be the main
 The distribution of chromium, in particular, is downright comical. The giant pink dot is actually a cluster of contaminated samples from Rio Turbio, a river in the state of Guanajuato, the worst of which is 281 times above the safe limit of 100 µg/L. The two outliers for mercury are the Adolfo Lopez Mateos dam (state of Sinaloa) and a tributary of the Coatzacoalcos river, located in an industrial zone in the state of Veracruz. Those are the only two sites with mercury levels above 10x the safe limit.  
 
 ![Lead](/img/Mexican-water-quality/lead.png)
+
 Lead shows a high, even distribution reminiscent of arsenic and fluoride, but spread throughout different parts of the country. Does this lead distribution track different geological features, or is it the result of industrial pollution? One suggestive piece of evidence comes from the types of sites where each pollutant was found:
 
 ![Stacked site types](/img/Mexican-water-quality/stacked_types.png)
