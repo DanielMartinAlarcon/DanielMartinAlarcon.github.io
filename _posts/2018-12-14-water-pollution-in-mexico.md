@@ -1,46 +1,42 @@
 ---
 title: Water Pollution in Mexico
-subtitle: A handy guide for finding trace elements
-image: /img/Mexican-water-quality/all_contaminants.png
+subtitle: An exploratory data analysis
+image: /img/Mexican-water-quality/all_contaminants_cropped.png
 ---
 
-You can learn quite a few things by looking at the distribution of trace elements in water bodies around Mexico. Arsenic and fluoride, two elements known to have geological origins, are present mostly in groundwater (wells, springs). Cadmium, chromium, mercury, and lead, which are frequently tied to industrial production, are mostly present in rivers.  Many sites around the country present contaminant levels much higher than the limits set for drinking water by the US Environmental Protection Agency (EPA).  In this post, I present a cursory examination of this dataset and present my methodology for the benefit of anyone interested in issues of water quality.
+In 2018, the Mexican National Water Comission (CONAGUA) published one of the most comprehensive datasets ever to be collected on the topic of water quality in Mexico. Water pollution with arsenic and fluoride is a well-known public health problem, but the scale and distribution of the problem had been difficult to visualize until now. 
+
+This post is a quick exploratory analysis of the CONAGUA dataset. I confirm the importance of arsenic and fluoride as top contaminants, as well as the unexpectedly high prevalence of lead. I also find two very distinct distribution patterns. Some trace element contamination (arsenic, fluoride) is mainly caused by geology, and appears at low levels in a wide variety of sites. Other pollution (mercury, chromium, cadmium) is less widespread but can reach comically high levels in some sites. Industrial activity seems the most likely culprit.
+
+Without further ado, let's look at the overall picture.
 
 ![All contaminants](/img/Mexican-water-quality/all_contaminants.png)
 
-In the maps below, I isolate each contaminant and also plot small gray plus signs for each of the sites in which the concentration of that element fell under the detection limit. The plus signs remind us that there are many clean water sources for each one that is contaminated. 
+The CONAGUA dataset contains the details of 18,113 water samples from 4,895 sites around Mexico. The most common types of sites were rivers and wells, though many other bodies of surface water were also sampled. All these samples were collected in 2017. The limits mentioned in the legend are the safe limits for drinking water established by Mexican regulations.
 
-Arsenic is one of the most widely distributed contaminants, appearing above the EPA limits in fully 68.3% of the surveyed sites (and above 10x the limit in 3.7%). Its distribution roughly tracks the largest mountain ranges in the country, the Sierra Madre Occidental, which is a continuation of the American Rocky Mountains. The most arsenic-polluted sites (>10x EPA) are mostly wells, since arsenic contamination is mostly due to geological causes, but arsenic also shows the widest range.  When we expand the view to everything above 1x EPA, there is ample arsenic contamination in rivers. 
+![As and F](/img/Mexican-water-quality/arsenic_and_fluoride.png)
 
-![Arsenic](/img/Mexican-water-quality/arsenic.png)
-![Arsenic Pie](/img/Mexican-water-quality/arsenic_pie.png)
-![Arsenic Pie2](/img/Mexican-water-quality/arsenic_pie2.png)
+I mentioned before that arsenic and fluoride (As and F) are known to be the main contaminants in Mexican drinking water. This map shows their high co-occurrence along a northwest-southeast axis that roughly follows the mountain ranges and plateaus of the middle of the country. The relation to geography is particularly apparent when contrasted to how cadmium, mercury, and chromium are distributed.
 
-Cadmium is present in relatively few sites, but at higher concentrations when it does appear. The highest cadmium levels (>10x) occur only in well water, while the vast majority of sites with levels between 1x and 10x of the EPA limit are actually in rivers and other surface sources (note how well is actually the smallest category in the second cadmium pie chart, which shows everything above 1x the EPA limit.
 ![Cadmium](/img/Mexican-water-quality/cadmium.png)
-![Cadmium Pie](/img/Mexican-water-quality/cadmium_pie.png)
-![Cadmium Pie 2](/img/Mexican-water-quality/cadmium_pie2.png)
-
-Looking at the map for Chromium below, you might think to yourself "that big pink dot looks like the wastewater stream from a hood ornament factory or something".  Actually, you're seeing the sample from Rio Turbio, a river in the state of Guanajuato, which is 28,099 times above the EPA limit of 100 µg/L.  With such a deviation from the national average, I wouldn't be surprised if this outlier were actually the result of a typo or an instrument malfunction. Relatively few sites (0.6%) are contaminated with chromium, and most of those are rivers.
-
-![Chromium](/img/Mexican-water-quality/chromium.png)
-![Chromium Pie](/img/Mexican-water-quality/chromium_pie.png)
-![Chromium Pie2](/img/Mexican-water-quality/chromium_pie2.png)
-
-The two outliers for mercury are the Adolfo Lopez Mateos dam (state of Sinaloa) and a tributary of the Coatzacoalcos river, located in an industrial zone in the state of Veracruz. Those are the only two sites with mercury levels above 10x the EPA limit.  There's a much greater variety of sites with levels above 1x, however.  At that level, there's nearly as many sites contaminated with mercury as with arsenic. In contrast to arsenic, however, mercury is mostly present in rivers.  If I had to guess, I'd say it was because of industrial pollution rather than geological causes.
 ![Mercury](/img/Mexican-water-quality/mercury.png)
-![Mercury Pie](/img/Mexican-water-quality/mercury_pie.png)
-![Mercury Pie 2](/img/Mexican-water-quality/mercury_pie2.png)
+![Chromium](/img/Mexican-water-quality/chromium.png)
 
-Lead also shows a high, even distribution.  Its top two sites are rivers right before they drain into the Pacific ocean. Its abundance in rivers and discharges suggests that lead is caused by industrial pollution also.
+The distribution of chromium, in particular, is downright comical. The giant pink dot is actually a cluster of contaminated samples from Rio Turbio, a river in the state of Guanajuato, the worst of which is 281 times above the safe limit of 100 µg/L. The two outliers for mercury are the Adolfo Lopez Mateos dam (state of Sinaloa) and a tributary of the Coatzacoalcos river, located in an industrial zone in the state of Veracruz. Those are the only two sites with mercury levels above 10x the safe limit.  
+
 ![Lead](/img/Mexican-water-quality/lead.png)
-![Lead Pie](/img/Mexican-water-quality/lead_pie.png)
-![Lead Pie2](/img/Mexican-water-quality/lead_pie2.png)
+Lead shows a high, even distribution reminiscent of arsenic and fluoride, but spread throughout different parts of the country. Does this lead distribution track different geological features, or is it the result of industrial pollution? One suggestive piece of evidence comes from the types of sites where each pollutant was found:
 
-Fluoride, finally, shows an even distribution throughout the middle of the country.  It is mostly absent in coastal regions and shows no sites with major contamination.  If I had to guess, I would say that it is more evenly distributed because high fluoride levels are less likely to be caused by industrial pollution. The pie charts bear this out.  There are no sites in the whole country where surface waters have fluoride levels above the EPA limit, even though a really high percentage of the total sites (3.9%) have at least 1x EPA contamination.
+![Stacked site types](/img/Mexican-water-quality/stacked_types.png)
 
-![Fluoride](/img/Mexican-water-quality/fluoride.png)
-![Fluoride Pie](/img/Mexican-water-quality/fluoride_pie.png)
-![Fluoride Pie2](/img/Mexican-water-quality/fluoride_pie2.png)
+If pollution comes from geological causes, I expect to find it in groundwater (the green bars in this chart). This happened with 1/3 of the high-arsenic sites, and every single high-fluoride site. Lead behaves more like cadmium, chromium, and mercury, appearing almost exclusively in rivers and surface water. 
 
-My data comes from the Mexican National Water Comission (CONAGUA). This dataset contains measurements of six trace elements, measured from 18,113 water samples, collected from 4,895 sites across the country. I present these maps as a resource for researchers that study water quality in Mexico. The full code for these maps is available as a [Jupyter notebook](https://github.com/DanielMartinAlarcon/Mexican-water-quality/blob/master/empirical/1_code/Mexican-water-quality.ipynb) in my Github account. 
+It is also apparent from this chart that arsenic is the most widespread contaminant in Mexico by far, accounting for more contaminated sites than all the other pollutants put together. Arsenic and fluoride are usually cited as the most important contaminants because drinking water in Mexico is most often drawn from groundwater. This graph, however, shows how lead is actually present in more contaminated sites than fluoride and presents a significant problem.
+
+It's also worth noting that I drew a separate color for samples labeled 'discharge', under the hypothesis that industrial contaminants would primarily show up in industrial or municipal discharges. To my surprise, those sites were actually no worse than rivers and other bodies of surface water (and represented a tiny amount of the total sites anyway). This is at least partly a result of sampling bias.  As the following figure shows, rivers are by far the type of site that were most heavily sampled for this dataset.
+
+![status_by_site_type](/img/Mexican-water-quality/status_by_site_type.png)
+
+As you can see, the problem of water pollution in Mexico is mostly one of arsenic, combined with lead in surface water and fluoride in groundwater. Exactly 1/3 of the samples in the CONAGUA dataset showed acceptable levels of all contaminants, though I'm tempted to report a higher pollution level because it seems like cheating to include a large number of clean samples from the ocean and coastal lagoons (I assume they're coastal).
+
+I hope that these visualizations will be useful to the scientists working to understand water pollution and increase access to clean drinking water.  You can find the full code of this analysis, including several Jupyter notebooks and high-resolution versions of the maps and charts, [on my Github].(https://github.com/DanielMartinAlarcon/Mexican-water-quality/blob/master/empirical/1_code/Mexican-water-quality.ipynb) 
