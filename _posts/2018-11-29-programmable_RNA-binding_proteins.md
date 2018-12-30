@@ -3,6 +3,14 @@ title: Programmable RNA-binding proteins
 subtitle: Primer to a PhD Thesis Project
 image: /img/3_pumby/pumby-thumbnail.png
 ---
+<style>
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: auto;
+}
+</style>
 
 ![Pumby-RNA structure, with labels](/img/3_pumby/pumby5.png)
 
@@ -46,7 +54,7 @@ We put our molecules through a variety of tests in cultured mammalian cells. We 
 
 But even more important than binding affinity is orthogonality. Two Pumby proteins, once designed to match two different targets, can coexist in the same cell without interference. In fact, one can express several proteins in the same cell at the same time and have them each perform an independent function. We demonstrated this orthogonality with an assay where 7 Pums (some PumHD, some Pumby) were exposed to 7 transcripts, under conditions where binding to the target would produce a signal.
 
-![Orthogonality](/img/3_pumby/pumby9.png)
+<img src="/img/3_pumby/pumby9.png" height="450" style="width:70%;"/>
 
 In separate experiments detailed in [our paper](http://syntheticneurobiology.org/PDFs/16.04.adamala.FULL.pdf), we showed that Pumby proteins can be used to detect the presence of particular transcripts in cells, to measure the translation of those transcripts, and even to induce translation by recruiting a translation driver (eIF4E) to a location on a transcript just upstream of an open reading frame.
 
