@@ -12,10 +12,9 @@ img {
 }
 </style>
 
-![Pumby-RNA structure, with labels](/img/3_pumby/pumby5.png)
-
-
 Pumby is a programmable protein designed to bind to the secondary genetic messenger, Ribonucleic Acid or RNA, in living mammalian cells. I designed and built Pumby for my PhD thesis while I worked in [Ed Boyden's group at the MIT Media Lab](http://syntheticneurobiology.org/). You can always read the full published paper ([PNAS copy](http://www.pnas.org/content/early/2016/04/25/1519368113); [local copy](http://syntheticneurobiology.org/PDFs/16.04.adamala.FULL.pdf)), but I believe that every good paper deserves an informal recap of what the project was about and why it is interesting. That is what you'll find here.
+
+![Pumby-RNA structure, with labels](/img/3_pumby/pumby5.png)
 
 ## What is a programmable molecule?
 
