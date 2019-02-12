@@ -1,6 +1,6 @@
 ---
 title: Goundwater Arsenic Revisited
-subtitle: Predictive analytics on messy real-world data
+subtitle: Inferring arsenic from ionic signatures
 image: /img/7_groundwater-arsenic/poison.png
 ---
 
