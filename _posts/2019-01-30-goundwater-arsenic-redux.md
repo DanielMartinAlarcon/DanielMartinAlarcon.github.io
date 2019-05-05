@@ -29,6 +29,21 @@ Ridge regression works best, and the best model is actually one that considers o
 
 I used polynomial expansion to add all the possible x^2 features, and ran the model again with feature selection. This illustrates just how important potassium is.  It's the most significant feature on its own, it shows up as K^2, and the other features seem to matter only inasmuch as they interact with K (though there's also the interaction between F and conductivity).
 
+```
+Best parameters from cross-validation:
+ridge__alpha: 1.0
+selectkbest__k: 7
+
+Selected Features and regression coefficients:
+K                   -44.68
+pH K                16.85
+conductivity F      8.36
+F K                 4.10
+K^2                 29.12
+K bicarbonate       0.20
+K total_alcalinity  -4.90
+```
+
 ![Selected poly features](/img/7_groundwater-arsenic/as5.png)
 
 
