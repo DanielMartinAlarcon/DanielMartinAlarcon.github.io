@@ -10,10 +10,31 @@ I set out to create a simple predictive model for arsenic (As) levels, and to de
 
 Though the dataset is small (only 150 samples), it was enough to see that potassium (K) is by far the factor most closely associated with As, followed by fluoride and pH. You can see the full code that went into these calculations, as well as the specific factors with the greatest influence, [on my Github](https://github.com/DanielMartinAlarcon/arsenic-in-durango).
 
-# Data cleanup
+# Data cleanup and simple regressions
 This dataset was gathered by researchers at the Advanced Materials Research Center (CIMAV) in Durango.  It contains 150 rows and 15 columns.
-![as1](/img/7_groundwater-arsenic/as1.png)
 
-The distribution of As in the samples is almost normal, with a few outliers of super-high concentration.
+![Dataframe](/img/7_groundwater-arsenic/as1.png)
 
-![as2](/img/7_groundwater-arsenic/as2.png)
+The distribution of As in the samples is almost normal, with a few outliers of super-high concentration.  I used robust scaling throughout my analysis to correct for those outliers.
+
+![As Histogram](/img/7_groundwater-arsenic/as2.png)
+
+I fit a simple regression and a ridge regression with feature selection ([selectkbest](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html)), comparing both to the baseline of just using the mean As value everywhere. 
+
+![Simple model results](/img/7_groundwater-arsenic/as3.png)
+
+Ridge regression works best, and the best model is actually one that considers only three features: pH, fluoride (F) and potassium (K).
+
+![Features selected by selectkbest](/img/7_groundwater-arsenic/as4.png)
+
+I used polynomial expansion to add all the possible x^2 features, and ran the model again with feature selection. This illustrates just how important potassium is.  It's the most significant feature on its own, it shows up as K^2, and the other features seem to matter only inasmuch as they interact with K (though there's also the interaction between F and conductivity).
+
+![Selected poly features](/img/7_groundwater-arsenic/as5.png)
+
+
+
+
+
+
+![word](/img/7_groundwater-arsenic/as3.png)
+
