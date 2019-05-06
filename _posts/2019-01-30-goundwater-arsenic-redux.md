@@ -54,5 +54,5 @@ K total_alcalinity  -4.90
 
 
 
-![word](/img/7_groundwater-arsenic/as3.png)
+<!-- ![word](/img/7_groundwater-arsenic/as3.png) -->
 
