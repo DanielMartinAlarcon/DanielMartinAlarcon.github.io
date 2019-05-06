@@ -1,6 +1,6 @@
 ---
 title: Water Pollution in Mexico
-subtitle: An exploratory data analysis
+subtitle: Geographical data visualization
 image: /img/4_water-pollution-in-mexico/all_contaminants_cropped.png
 ---
 
