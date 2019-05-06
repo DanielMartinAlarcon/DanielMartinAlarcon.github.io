@@ -8,7 +8,7 @@ The State of Durango, in northern Mexico, is one of those affected with signific
 
 I set out to determine which other features of groundwater are most closely associated with arsenic (As) levels, hoping to find a cheaper indicator that is strongly associated with As.  I used a dataset of water samples from Durango for which the levels of several common ions have been quantified.  I used feature selection, with and without polynomial expansion, to narrow the search.  I then used partial dependence plots and Shapley values to further determine the contributions of individual dataset features to the overall prediction. 
 
-Though the dataset is small (only 150 samples), it was enough to see that potassium (K) is by far the factor most closely associated with As, followed by fluoride and pH.  You can see the full code that went into these calculations, as well as the specific factors with the greatest influence, [on my Github](https://github.com/DanielMartinAlarcon/arsenic-in-durango).
+Though the dataset is small (only 150 samples), it was enough to see that potassium (K) is by far the factor most closely associated with As, followed by fluoride and pH.  You can see the full code that went into these calculations in the several notebooks in this [Github Repo](https://github.com/DanielMartinAlarcon/arsenic-in-durango).
 
 # Potassium (K) is the most important feature
 This dataset was gathered by researchers at the Advanced Materials Research Center (CIMAV) in Durango.  It contains 150 rows and 15 columns.
