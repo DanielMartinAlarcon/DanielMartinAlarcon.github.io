@@ -1,6 +1,6 @@
 ---
 title: Predictors of Goundwater Arsenic
-subtitle: Feature selection in real-world data [under construction]
+subtitle: Feature selection in real-world data
 image: /img/7_groundwater-arsenic/poison.png
 ---
 
