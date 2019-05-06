@@ -50,7 +50,19 @@ K total_alcalinity  -4.90
 ```
 
 # Potassium and Fluoride are most predictive at high concentrations
+Knowing that K and F were the most important features, I wondered what else I could find out about their contribution.  Are they more closely associated with As at high or low concentrations?  [Partial dependence plots](https://christophm.github.io/interpretable-ml-book/pdp.html) are a great way to visualize just that.  They are a general way of visualizing the marginal effect of a feature on the results of a machine learning model. A PD plot can show you whether the feature's relationship with the target is linear, monotonic, or more complex.  I used the convenient package [PDPbox](https://github.com/SauceCat/PDPbox) to create PD plots for the most important features identified before.
 
+Potassium actually has zero predictive power over As until a concentration of about 9 mg/L, at which point it becomes important.
+
+![PDP K](/img/7_groundwater-arsenic/as4.png)
+
+Fluoride behaves similarly, though it has a non-zero contribution until the inflection point at 4 mg/L.
+
+![PDP F](/img/7_groundwater-arsenic/as5.png)
+
+This is all in contrast to, for example, pH, where the most influential range is in the mid-basic range rather than at the extremes.
+
+![PDP pH](/img/7_groundwater-arsenic/as6.png)
 
 
 
