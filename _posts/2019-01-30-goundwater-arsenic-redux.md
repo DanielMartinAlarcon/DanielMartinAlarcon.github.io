@@ -1,6 +1,6 @@
 ---
 title: Predictors of Goundwater Arsenic
-subtitle: Feature selection in real-world data
+subtitle: How to calculate feature importance
 image: /img/7_groundwater-arsenic/poison.png
 ---
 
