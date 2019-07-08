@@ -24,17 +24,25 @@ Water pollution with trace elements, particularly arsenic and fluoride, is a pub
 This analysis is be the basis of a paper currently under review, _Co-occurrence of arsenic and fluoride in drinking water sources in Mexico: Geographical data visualization._
 
 # The tools
+## Cookiecutter
 [Cookiecutter](http://drivendata.github.io/cookiecutter-data-science/) is a tool that generates structure for your data science project.  It creates a good folder structure, and populates it with some necessities like `.gitignore` files, a license statement, and a few files for packages that generate documentation automatically (though I don't use that functionality in this project). It also has the most sensible project structure I have found, one that clearly separates your raw data, generated data, python scripts, reports, etc.
 
 Moreover, peole have made versions of this package for different niche applications, and I found a really useful one for Luigi workflows: [Cookiecutter Data Science with Luigi](https://github.com/ffmmjj/luigi_data_science_project_cookiecutter). The nice thing about this version is that it comes with:
 
 1. A script `final.py` with a Luigi task `FinalTask` that you will populate with dependencies to all the other tasks in your project. 
-2. A [Makefile](https://www.gnu.org/software/make/) with a couple of commands that check your programming environment, clean up data, or execute `FinalTask`.
+2. A [GNU Make](https://www.gnu.org/software/make/) Makefile with a couple of commands that check your programming environment, clean up data, or execute `FinalTask`.
 
 The upshot of this arrangement is that, once everything is in place and you're in the root folder of your Docker container, you can type `make data` into the terminal and Luigi will run all the tasks that haven't been run yet. One command to re-create any parts that are missing or the entire project. (There's also `make data_clean` to remove all the stuff you just created, and both can be customized).
 
-[This article](https://medium.com/@rrfd/cookiecutter-data-science-organize-your-projects-atom-and-jupyter-2be7862f487e) says more about the usefulness of Cookiecutter and how to think about organizing your data science project.
+For more about the usefulness of Cookiecutter and how to think about organizing your data science project, check out [Cookiecutter Data Science — Organize your Projects — Atom and Jupyter](https://medium.com/@rrfd/cookiecutter-data-science-organize-your-projects-atom-and-jupyter-2be7862f487e).
 
 ## Docker
+[Docker](https://www.docker.com/) is a tool for building lightweight containers (similar to virtual machines) that contain everything you need to run your analysis, from the operating system to all the python packages that your process depends on. For a good introduction to Docker, check out [How Docker Can Help You Become A More Effective Data Scientist](https://towardsdatascience.com/how-docker-can-help-you-become-a-more-effective-data-scientist-7fc048ef91d5).
+
+In addition to the standard folder structure created with Cookiecutter, [this project's GitHub repo](https://github.com/DanielMartinAlarcon/Arsenic-and-Fluoride-Mexico) includes a `docker` folder with nothing but a `Dockerfile` and `requirements.txt`. These two files are all you need locally to build a Docker image, instantiate it into a Docker container, and fully recreate my programming environment. Alternatively, if you don't want to wait for Docker to build the image from these instructions, you can pull the image straight from [this project's DockerHub repo](https://hub.docker.com/r/danielmartinalarcon/arsenic-and-fluoride-in-mexico).
+
+The most useful source of Docker commands is not the official documentation, but actually this [Docker cheat sheet](https://github.com/wsargent/docker-cheat-sheet) that links to it. [This presentation](https://www.youtube.com/watch?v=oO8n3y23b6M) ([and its slides](https://docs.google.com/presentation/d/1LkeJc-O5k0LQvzcFokj3yKjcEDns10JGX9uHK0igU8M/edit#slide=id.g23c212af60_0_0)) from ChiPy 2017 has several good examples, though note that some of the Dockerfile syntax has changed since it was published. [This presentation](https://www.youtube.com/watch?v=gBalsA-x300) ([and its repo](https://github.com/harnav/pydata-docker-tutorial/blob/master/dev-env/00-devenv.org)) from PyData LA 2018 has updated syntax and a much clearer walk-through for beginners.
+
 ## Luigi
 
+For more about project organization and Luigi, check out [A Quick Guide to Organizing [Data Science] Projects (updated for 2018)](https://medium.com/outlier-bio-blog/a-quick-guide-to-organizing-data-science-projects-updated-for-2016-4cbb1e6dac71). For the best introduction to Luigi syntax and motivation, check out minute 8:25 of [this presentation](https://www.youtube.com/watch?v=jpkZGXrhZJ8) from PyCon 2017. For a more complex machine learning project built around the same principles, check out [this presentation](https://www.youtube.com/watch?v=jRkW5Uf58K4) (and [repo](https://github.com/crazzle/pydata_berlin_2018)) from PyData Berlin 2018.
