@@ -85,4 +85,25 @@ When I needed to update my figure legends, for example, I went back to the paren
 
 For more about project organization and Luigi, check out [A Quick Guide to Organizing [Data Science] Projects (updated for 2018)](https://medium.com/outlier-bio-blog/a-quick-guide-to-organizing-data-science-projects-updated-for-2016-4cbb1e6dac71) and [Why we chose Luigi for our NGS pipelines](https://medium.com/outlier-bio-blog/why-we-chose-luigi-for-our-ngs-pipelines-5298c45a74fc). For the best introduction to Luigi syntax and motivation, check out minute 8:25 of [this presentation](https://www.youtube.com/watch?v=jpkZGXrhZJ8) from PyCon 2017. For a more complex machine learning project built around the same principles, check out [this presentation](https://www.youtube.com/watch?v=jRkW5Uf58K4) (and [repo](https://github.com/crazzle/pydata_berlin_2018)) from PyData Berlin 2018.
 
-# How I built the workflow
+# How to build a workflow
+Start out with the structure for the project (and thus for the folder tree). Install Cookiecutter on your machine and make a new GitHub repo, or go to an existing one approach it like a messy closet.  Take everything out into a temporary folder, create the new folder tree, and carefully bring the important contents into the new structure. The [main Cookiecutter page](https://github.com/drivendata/cookiecutter-data-science) walks you through the commands.
+
+If you're using [Cookiecutter Data Science with Luigi](https://github.com/ffmmjj/luigi_data_science_project_cookiecutter) like I am, take a moment to familiarize yourself with `final.py`, the script where you'll import all the other scripts and add all the other tasks as dependencies. Change the folder structure within `src` to reflect the broad categories of operations that your project will require.
+
+![Fig1](/img/11_reproducible-science/fig1.png)
+
+```python
+# /Project_repo/src/data_tasks/final.py
+
+import luigi
+
+class FinalTask(luigi.Task):
+    def requires(self):
+        pass
+
+    def output(self):
+        pass
+
+    def run(self):
+        pass
+```
