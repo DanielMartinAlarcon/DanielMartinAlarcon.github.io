@@ -21,7 +21,20 @@ In 2018, the Mexican National Water Commission (CONAGUA) published one of the mo
 
 Water pollution with trace elements, particularly arsenic and fluoride, is a public health problem whose existence is well documented but whose exact scale remains unknown. I dove into this dataset to find out how arsenic and fluoride (As and F) are distributed in the country, and to estimate the health burden associated with continuous exposure to these contaminants. My task required mapping all the sampling sites, visualizing which sites are contaminated, determining the population exposed to that contamination, and estimating the health burden associated with that exposure. 
 
-This analysis is be the basis of a paper currently under review, entitled _Co-occurrence of arsenic and fluoride in drinking water sources in Mexico: Geographical data visualization._
+This analysis is be the basis of a paper currently under review, _Co-occurrence of arsenic and fluoride in drinking water sources in Mexico: Geographical data visualization._
 
 # The tools
+[Cookiecutter](http://drivendata.github.io/cookiecutter-data-science/) is a tool that generates structure for your data science project.  It creates a good folder structure, and populates it with some necessities like `.gitignore` files, a license statement, and a few files for packages that generate documentation automatically (though I don't use that functionality in this project). It also has the most sensible project structure I have found, one that clearly separates your raw data, generated data, python scripts, reports, etc.
+
+Moreover, peole have made versions of this package for different niche applications, and I found a really useful one for Luigi workflows: [Cookiecutter Data Science with Luigi](https://github.com/ffmmjj/luigi_data_science_project_cookiecutter). The nice thing about this version is that it comes with:
+
+1. A script `final.py` with a Luigi task `FinalTask` that you will populate with dependencies to all the other tasks in your project. 
+2. A [Makefile](https://www.gnu.org/software/make/) with a couple of commands that check your programming environment, clean up data, or execute `FinalTask`.
+
+The upshot of this arrangement is that, once everything is in place and you're in the root folder of your Docker container, you can type `make data` into the terminal and Luigi will run all the tasks that haven't been run yet. One command to re-create any parts that are missing or the entire project. (There's also `make data_clean` to remove all the stuff you just created, and both can be customized).
+
+[This article](https://medium.com/@rrfd/cookiecutter-data-science-organize-your-projects-atom-and-jupyter-2be7862f487e) says more about the usefulness of Cookiecutter and how to think about organizing your data science project.
+
+## Docker
+## Luigi
 
