@@ -85,7 +85,7 @@ When I needed to update my figure legends, for example, I went back to the paren
 
 For more about project organization and Luigi, check out [A Quick Guide to Organizing [Data Science] Projects (updated for 2018)](https://medium.com/outlier-bio-blog/a-quick-guide-to-organizing-data-science-projects-updated-for-2016-4cbb1e6dac71) and [Why we chose Luigi for our NGS pipelines](https://medium.com/outlier-bio-blog/why-we-chose-luigi-for-our-ngs-pipelines-5298c45a74fc). For the best introduction to Luigi syntax and motivation, check out minute 8:25 of [this presentation](https://www.youtube.com/watch?v=jpkZGXrhZJ8) from PyCon 2017. For a more complex machine learning project built around the same principles, check out [this presentation](https://www.youtube.com/watch?v=jRkW5Uf58K4) (and [repo](https://github.com/crazzle/pydata_berlin_2018)) from PyData Berlin 2018.
 
-# How to build a workflow
+# How to set up a Docker work environment
 ## Make the folders
 Start out with the structure for the project (and thus for the folder tree). Install Cookiecutter on your machine and make a new GitHub repo, or go to an existing one approach it like a messy closet.  Take everything out into a temporary folder, create the new folder tree in your root folder (I'll call it `repo_root`), and carefully bring the important contents into the new structure. The [main Cookiecutter page](https://github.com/drivendata/cookiecutter-data-science) walks you through the commands.
 
@@ -184,7 +184,7 @@ To run a bash shell inside the container, open a new terminal window on your loc
 
 Now you should see that the terminal prompt changed, and that you are now inside the container!  Check out which programs are installed with `pip list`, and get ready to start installing more stuff.
 
-## Start developing your project
+## Update the image with new packages
 From this point, I normally keep three terminal windows open: one running Jupyter inside the container, one running a bash shell to my local machine, one running a bash shell to the container. I edit the container's contents from the inside or by changing the folders that are mounted to the container (in this case, everything in `repo_root`). If you use VS Code, note that it has useful plugins for seeing currently available images and containers.
 
 As you start working, you'll figure out what new Python packages you need for your project.  After you install them in the container, remember to occasionally export those dependencies to `requirements.txt`.  Do so by running, from inside the container:
@@ -192,3 +192,40 @@ As you start working, you'll figure out what new Python packages you need for yo
 `$ pip freeze > docker/requirements.txt`
 
 Thus the empty file that you created earlier will get replaced with a list of your dependencies. Occasionally shut down your container and rebuild the image with these new dependencies, and definitely do so in the end, to check that your image works.
+
+# How to build a Luigi workflow
+You're probably used to designing a linear workflow that goes step-by-step down the page of a Jupyter notebook.  In fact, if you're refactoring an old project then that's probably how your project is already written up.  Your job now is to turn each of those steps into a Luigi task, to organize those tasks into python scripts of similar tasks, and to put those scripts into the overall folder structure that you have in `src`.
+
+Let's start with your most common tool, the humble Luigi task.
+
+![fig2](/img/11_reproducible-science/fig2.png)
+
+[Under construction, check in later for more blog post]
+<!-- When a task is executed, Luigi will first check all the dependencies, verify that they've been met, and then run all the commands in `run()`. These commands should produce some sort of result (say, a file called `conclusions.csv`) and write it to a particular place in the folder structure (say, `data/processed/`). The `output()` method basically exists to check whether the result has been generated. It returns a `Target` object, which has just a single method, `exists()`, which 
+ basically checks whether those files are there, and marks the task as complete when the files are found. 
+
+```python
+# repo_root/src/data_tasks/getting_started.py
+
+import luigi
+
+class Task3(luigi.Task):
+    # Global variables
+    output_file = "processed/conclusions.csv"
+    
+    def requires(self):
+        # 
+        yield Task1()
+        yield Task2()
+
+    def output(self):
+        return luigi.LocalTarget(self.output_file)
+
+    def run(self):
+        pass
+```
+
+So what do these parts mean?
+
+The Makefile is designed such that tasks are run from the     `data` folder. Thus, you should write your tasks as if they will always be run from inside `data`. That's why, in order to place the output at `repo_root/data/processed/`, I only have to specify `processed/`.
+*  -->
