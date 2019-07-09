@@ -185,4 +185,10 @@ To run a bash shell inside the container, open a new terminal window on your loc
 Now you should see that the terminal prompt changed, and that you are now inside the container!  Check out which programs are installed with `pip list`, and get ready to start installing more stuff.
 
 ## Start developing your project
-From this point, I normally keep three terminal windows open: one running Jupyter inside the container, one running a bash shell to my local machine, one running a bash shell to the container. I edit the container's contents from the inside or by changing the folders that are mounted to the container (in this case, everything in `repo_root`).
+From this point, I normally keep three terminal windows open: one running Jupyter inside the container, one running a bash shell to my local machine, one running a bash shell to the container. I edit the container's contents from the inside or by changing the folders that are mounted to the container (in this case, everything in `repo_root`). If you use VS Code, note that it has useful plugins for seeing currently available images and containers.
+
+As you start working, you'll figure out what new Python packages you need for your project.  After you install them in the container, remember to occasionally export those dependencies to `requirements.txt`.  Do so by running, from inside the container:
+
+`$ pip freeze > docker/requirements.txt`
+
+Thus the empty file that you created earlier will get replaced with a list of your dependencies. Occasionally shut down your container and rebuild the image with these new dependencies, and definitely do so in the end, to check that your image works.
