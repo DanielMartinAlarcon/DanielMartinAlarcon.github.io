@@ -86,14 +86,13 @@ When I needed to update my figure legends, for example, I went back to the paren
 For more about project organization and Luigi, check out [A Quick Guide to Organizing [Data Science] Projects (updated for 2018)](https://medium.com/outlier-bio-blog/a-quick-guide-to-organizing-data-science-projects-updated-for-2016-4cbb1e6dac71) and [Why we chose Luigi for our NGS pipelines](https://medium.com/outlier-bio-blog/why-we-chose-luigi-for-our-ngs-pipelines-5298c45a74fc). For the best introduction to Luigi syntax and motivation, check out minute 8:25 of [this presentation](https://www.youtube.com/watch?v=jpkZGXrhZJ8) from PyCon 2017. For a more complex machine learning project built around the same principles, check out [this presentation](https://www.youtube.com/watch?v=jRkW5Uf58K4) (and [repo](https://github.com/crazzle/pydata_berlin_2018)) from PyData Berlin 2018.
 
 # How to build a workflow
-Start out with the structure for the project (and thus for the folder tree). Install Cookiecutter on your machine and make a new GitHub repo, or go to an existing one approach it like a messy closet.  Take everything out into a temporary folder, create the new folder tree, and carefully bring the important contents into the new structure. The [main Cookiecutter page](https://github.com/drivendata/cookiecutter-data-science) walks you through the commands.
+## Make the folders
+Start out with the structure for the project (and thus for the folder tree). Install Cookiecutter on your machine and make a new GitHub repo, or go to an existing one approach it like a messy closet.  Take everything out into a temporary folder, create the new folder tree in your root folder (I'll call it `repo_root`), and carefully bring the important contents into the new structure. The [main Cookiecutter page](https://github.com/drivendata/cookiecutter-data-science) walks you through the commands.
 
 If you're using [Cookiecutter Data Science with Luigi](https://github.com/ffmmjj/luigi_data_science_project_cookiecutter) like I am, take a moment to familiarize yourself with `final.py`, the script where you'll import all the other scripts and add all the other tasks as dependencies. Change the folder structure within `src` to reflect the broad categories of operations that your project will require.
 
-![Fig1](/img/11_reproducible-science/fig1.png)
-
 ```python
-# /Project_repo/src/data_tasks/final.py
+# repo_root/src/data_tasks/final.py
 
 import luigi
 
@@ -107,3 +106,83 @@ class FinalTask(luigi.Task):
     def run(self):
         pass
 ```
+## Make a starting image from a Dockerfile
+Make a new folder `docker` in `repo_root`, and create a new `Dockerfile` and an empty `requirements.txt`. You want to import a Docker image that represents a good minimal starting point to build on. If you want a relatively heavy image with everything you need for a machine learning project, consider one of the images in the [Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/). If you have a simple project like mine, consider starting with a more minimal image that has only Python. I used the image `Python:3.7.3`, which I think is based on some form of Ubuntu.  For future projects I'll choose an image based on a more minimal operating system like [Alpine Linux](https://hub.docker.com/_/alpine/). 
+
+```python
+# repo_root/docker/Dockerfile
+
+FROM python:3.7.3
+LABEL maintainer="Daniel Martin-Alarcon <daniel@martinalarcon.org>"
+WORKDIR /app
+RUN apt-get update && apt-get install -y python3-pip
+COPY requirements.txt .
+RUN pip3 install -r requirements.txt && \
+    pip3 install jupyter
+EXPOSE 8888
+VOLUME /app
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+```
+The order of the elements in the Dockerfile matters, as each line adds a new layer. More immutable elements (like installing `pip3`) should come first, since Docker can use cached versions of that layer rather than running the operation again. You can even use multistage builds to minimize your image size, as described [here](https://blog.realkinetic.com/building-minimal-docker-containers-for-python-applications-37d0272c52f3). If you're starting out with a different base image than mine, you'll probably have to add different commands at this stage. The introductory guides mentioned earlier contain a few different Dockerfiles that work, and [How Docker Can Help You Become A More Effective Data Scientist](https://towardsdatascience.com/how-docker-can-help-you-become-a-more-effective-data-scientist-7fc048ef91d5) contains a great description of common Dockerfile commands and why you'd want to use them.
+
+As for the commands here, a few notes:
+
+* `WORKDIR /app`: Creates a new directory and makes it the default.
+* `COPY requirements.txt .`: Copies the file from your local machine to the current working directory (referenced by that lonely dot at the end).
+* `EXPOSE 8888`: Exposes the container port 8888 to the world.
+* `VOLUME /app`: Is really more of a note to the user that external volumes should be mounted to this container directory, if you mount directories at runtime (and we will).
+* `CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]`: Is the final command that executes when the container is instantiated. It opens a Jupyter notebook inside the container and connects it to container port 8888 without trying to open a browser (because we never installed a browser).
+
+You'll know that your Dockerfile works once you can run this command from inside the `repo_root/docker` folder...
+
+`$ docker build -t image_name1 .`
+
+... and get a success message:
+
+```
+Successfully built 32c7086f1e79
+Successfully tagged image_name:latest
+```
+You should also regularly run `docker image ls` and `docker container ls` to keep track of current images and containers. 
+
+## Instantiate and enter a new container
+
+Once your image is built, it's time to instantiate it into a container and start working from inside, in our fresh new computing environment. Run this on your local machine:
+
+`$ docker run --name container_name -p 9999:8888 -v /path/to/repo_root:/app image_name`
+
+This is what the command is doing:
+
+* `--name container_name`: Assigns a new name to the container you are about to instantiate.
+* `-p 9999:8888`: Connects port 8888 in the container (where Jupyter is!) with port 9999 on your machine. 
+* `-v /path/to/repo_root:/app`: Mounts local folder `repo_root` to the folder `app` in the container.  Changes in one folder will be reflected in the other.  More importantly, changes in the container will _remain_ in the local folder after the container is closed or deleted. That's how our container will export its results to the outside world.
+
+Your terminal should produce output like this:
+```
+[I 23:32:22.207 NotebookApp] Writing notebook server cookie secret to /root/.local/share/jupyter/runtime/notebook_cookie_secret
+[I 23:32:23.650 NotebookApp] Jupyter-nbGallery enabled!
+[I 23:32:23.652 NotebookApp] Serving notebooks from local directory: /app
+[I 23:32:23.652 NotebookApp] 0 active kernels
+[I 23:32:23.653 NotebookApp] The Jupyter Notebook is running at:
+[I 23:32:23.653 NotebookApp] http://0.0.0.0:8888/?token=f93ec866b52666f1aa9e52e45e53da390ff541084c55a529
+[I 23:32:23.653 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 23:32:23.655 NotebookApp] 
+    
+    Copy/paste this URL into your browser when you connect for the first time,
+    to login with a token:
+        http://0.0.0.0:8888/?token=f93ec866b52666f1aa9e52e45e53da390ff541084c55a529
+```
+And if you open your browser to `localhost:9999`, you should see a Jupyter splash page prompting you for the token that your container just generated.
+
+![fig1](/img/11_reproducible-science/fig1.png)
+
+Enter the token (`f93ec866b52666f1aa9e52e45e53da390ff541084c55a529`) and Log In to see the folder structure inside your container, now accessible through Jupyter. 
+
+To run a bash shell inside the container, open a new terminal window on your local computer and run:
+
+`$ docker exec -it container_name /bin/bash`
+
+Now you should see that the terminal prompt changed, and that you are now inside the container!  Check out which programs are installed with `pip list`, and get ready to start installing more stuff.
+
+## Start developing your project
+From this point, I normally keep three terminal windows open: one running Jupyter inside the container, one running a bash shell to my local machine, one running a bash shell to the container. I edit the container's contents from the inside or by changing the folders that are mounted to the container (in this case, everything in `repo_root`).
