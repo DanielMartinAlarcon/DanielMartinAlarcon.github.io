@@ -200,9 +200,7 @@ Let's start with your most common tool, the humble Luigi task.
 
 ![fig2](/img/11_reproducible-science/fig2.png)
 
-[Under construction, check in later for more blog post]
-<!-- When a task is executed, Luigi will first check all the dependencies, verify that they've been met, and then run all the commands in `run()`. These commands should produce some sort of result (say, a file called `conclusions.csv`) and write it to a particular place in the folder structure (say, `data/processed/`). The `output()` method basically exists to check whether the result has been generated. It returns a `Target` object, which has just a single method, `exists()`, which 
- basically checks whether those files are there, and marks the task as complete when the files are found. 
+Here's a task written within our folder structure, which produces a pandas DataFrame and exports it to CSV.
 
 ```python
 # repo_root/src/data_tasks/getting_started.py
@@ -222,10 +220,24 @@ class Task3(luigi.Task):
         return luigi.LocalTarget(self.output_file)
 
     def run(self):
-        pass
+        # [Code that makes a pandas DataFrame]
+
+        # The file gets exported to CSV
+        df.to_csv(self.output_file)
 ```
+When a task is executed, Luigi will first check all the dependencies listed in `requires()`, verify that they've been met, and then run all the commands in `run()`. These commands should produce some sort of result (say, a file called `conclusions.csv`) and write it to a particular place in the folder structure (say, `data/processed/`). 
 
-So what do these parts mean?
+The `output()` method serves two purposes.  First, it allows Luigi to check whether the result has been generated. `output()` returns a `Target` object tied to a filename. `Target` has a single method, `exists()`, which returns True if there is in fact a file at the declared location. Luigi uses the `Target` object returned by the `output()` method to determine whether the task is complete or needs to be re-run.  Thus, if you've edited the contents of `run()` and want to generate a new version of the results, delete the output file and run Luigi again (most easily through the `make data` command).
 
-The Makefile is designed such that tasks are run from the     `data` folder. Thus, you should write your tasks as if they will always be run from inside `data`. That's why, in order to place the output at `repo_root/data/processed/`, I only have to specify `processed/`.
-*  -->
+The second purpose of `output()` is that it returns the `Target` object, so that the next task can take it as input. This is how the output of one task becomes the input of the next. You can see some examples of how tasks are chained [here](http://mattiacinelli.com/tutorial-on-luigi-pipeline-part-2-examples/).
+
+For our purposes, though, there are only three things to remember:
+1. `run()` should generate some file
+2. `output()` should point to that file
+3. `requires()` should list the predecessor tasks that produce the pre-requisites for this one.
+
+**A note about folder context**: The Makefile is designed such that tasks are run from the `data` folder. Thus, you should write your tasks as if they will always be run from inside `data`. That's why, in order to place the output at `repo_root/data/processed/`, I only have to specify `processed/`.
+
+## How this project uses Luigi workflows
+
+[Under construction, check in later for more blog post]
