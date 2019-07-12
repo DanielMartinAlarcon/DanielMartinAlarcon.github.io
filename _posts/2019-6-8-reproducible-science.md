@@ -229,7 +229,7 @@ When a task is executed, Luigi will first check all the dependencies listed in `
 
 The `output()` method serves two purposes.  First, it allows Luigi to check whether the result has been generated. `output()` returns a `Target` object tied to a filename. `Target` has a single method, `exists()`, which returns True if there is in fact a file at the declared location. Luigi uses the `Target` object returned by the `output()` method to determine whether the task is complete or needs to be re-run.  Thus, if you've edited the contents of `run()` and want to generate a new version of the results, delete the output file and run Luigi again (most easily through the `make data` command).
 
-The second purpose of `output()` is that it returns the `Target` object, so that the next task can take it as input. This is how the output of one task becomes the input of the next. You can see some examples of how tasks are chained [here](http://mattiacinelli.com/tutorial-on-luigi-pipeline-part-2-examples/).
+The second purpose of `output()` is that it returns the `Target` object, so that the next task can take it as input. This is how the output of one task becomes the input of the next. You can see some examples of how tasks are chained [here](http://mattiacinelli.com/tutorial-on-luigi-pipeline-part-2-examples/) and [here](https://intoli.com/blog/luigi-jupyter-notebooks/).
 
 For our purposes, though, there are only three things to remember:
 1. `run()` should generate some file
@@ -240,4 +240,23 @@ For our purposes, though, there are only three things to remember:
 
 ## How this project uses Luigi workflows
 
-[Under construction, check in later for more blog post]
+I started out with an older version of my workflow, designed in Jupyter. I removed all those files from my folder structure and added their parts back in one-by-one, as Luigi Tasks written out in separate python scripts.  I strove for each task to represent a single operation with the data, and used class inheritance to keep the code as non-redundant as possible. I then called all the tasks I'd written as requirements in a the original task that came with the folder structure, `FinalTask`. I could also have designed this such that all the tasks were linked with each other and `FinalTask` required only the penultimate task in that inheritance list.
+
+I used the folder structure heavily, making data flow from folders such as `raw` and `external` to `interim` and `processed`. I wrote tasks such that they referred to this folder structure, though the `Target` objects passed around by `output()` functions can also be used to transmit the location of data without ever having to hard-code it into the functions.
+
+# Project results
+I cross-referenced the 3,951 sampled sites with over 192,000 towns around the country, filtering the latter for proximity to the former. 
+
+![all_sites](/img/11_reproducible-science/all_sites.png)
+
+I mapped and plotted the location of six different contaminants:
+
+![All contaminants](/img/11_reproducible-science/all_contaminants.png)
+
+For each town, I assumed that the population was exposed to the average contamination of all the sites within 5 km, and used this to estimate several public health indicators related to arsenic and fluoride contamination.  As one salient example, I calculated that chronic exposure would probably be responsible for an additional 13,000 lifetime cases of cancer in the country, affecting mostly the arid states of Durango and Zacatecas.
+
+![summary_arsenic](/img/11_reproducible-science/summary_arsenic.png)
+
+I estimate that about half (56%) of the Mexican population (66 million people in 2010) lives in a town within 5 km of a sampling site, 3.05 million of them are exposed to excessive fluoride, and 8.81 million are exposed to excessive arsenic. 
+
+The results of this data analysis are currently under peer review, in preparation for publication. You can find my full code in this project's [GitHub Repo](https://github.com/DanielMartinAlarcon/Arsenic-and-Fluoride-Mexico), and its Docker image in the project's [DockerHub Repo](https://hub.docker.com/r/danielmartinalarcon/arsenic-and-fluoride-in-mexico).
