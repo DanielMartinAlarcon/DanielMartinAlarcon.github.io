@@ -253,10 +253,10 @@ I mapped and plotted the location of six different contaminants:
 
 ![All contaminants](/img/11_reproducible-science/all_contaminants.png)
 
-For each town, I assumed that the population was exposed to the average contamination of all the sites within 5 km, and used this to estimate several public health indicators related to arsenic and fluoride contamination.  As one salient example, I calculated that chronic exposure would probably be responsible for an additional 13,000 lifetime cases of cancer in the country, affecting mostly the arid states of Durango and Zacatecas.
+For each town, I assumed that the population was exposed to the average contamination of all the sites within 5 km, and used this to estimate several public health indicators related to arsenic and fluoride contamination.  As one salient example, I calculated that chronic exposure would probably be responsible for an additional 13,000 lifetime cases of cancer in the country, affecting mostly the arid states of Durango and Jalisco.
 
 ![summary_arsenic](/img/11_reproducible-science/summary_arsenic.png)
 
-I estimate that about half (56%) of the Mexican population (66 million people in 2010) lives in a town within 5 km of a sampling site, 3.05 million of them are exposed to excessive fluoride, and 8.81 million are exposed to excessive arsenic. 
+I estimate that about half (56%) of the Mexican population lives in a town within 5 km of a sampling site, 3.05 million of them are exposed to excessive fluoride, and 8.81 million are exposed to excessive arsenic. 
 
 The results of this data analysis are currently under peer review, in preparation for publication. You can find my full code in this project's [GitHub Repo](https://github.com/DanielMartinAlarcon/Arsenic-and-Fluoride-Mexico), and its Docker image in the project's [DockerHub Repo](https://hub.docker.com/r/danielmartinalarcon/arsenic-and-fluoride-in-mexico).
