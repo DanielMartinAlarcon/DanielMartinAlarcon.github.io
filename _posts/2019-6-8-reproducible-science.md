@@ -5,7 +5,7 @@ image: /img/11_reproducible-science/all_contaminants_cropped.png
 ---
 
 # TL;DR
-I describe a workflow that uses [Docker](https://www.docker.com/) and [Luigi](https://luigi.readthedocs.io/en/stable/index.html) to create fully transparent and reproducible data analyses. End users can repeat the original calculations to produce all the final tables and figures starting from the original raw data. End users (and the author, at a later date) can easily make isolated changes to the middle of the pipeline and know that their changes propagate to all the other steps in the process. I demonstrate this workflow by applying it to a paper (currently under peer review) that studies drinking water contamination in Mexico.
+I describe a workflow that uses [Docker](https://www.docker.com/) and [Luigi](https://luigi.readthedocs.io/en/stable/index.html) to create fully transparent and reproducible data analyses. End users can repeat the original calculations to produce all the final tables and figures starting from the original raw data. End users (and the author, at a later date) can easily make isolated changes to the middle of the pipeline and know that their changes propagate to all the other steps in the process. I demonstrate this workflow by applying it to a paper (currently under peer review) that studies drinking water contamination in Mexico. You can find my full code in this project's [GitHub Repo](https://github.com/DanielMartinAlarcon/Arsenic-and-Fluoride-Mexico), and its Docker image in the project's [DockerHub Repo](https://hub.docker.com/r/danielmartinalarcon/arsenic-and-fluoride-in-mexico).
 
 ![All contaminants](/img/11_reproducible-science/all_contaminants.png)
 
@@ -32,9 +32,9 @@ This analysis is be the basis of a paper currently under review, _Co-occurrence 
 Moreover, peole have made versions of this package for different niche applications, and I found a really useful one for Luigi workflows: [Cookiecutter Data Science with Luigi](https://github.com/ffmmjj/luigi_data_science_project_cookiecutter). The nice thing about this version is that it comes with:
 
 1. A script `final.py` with a Luigi task `FinalTask` that you will populate with dependencies to all the other tasks in your project. 
-2. A [GNU Make](https://www.gnu.org/software/make/) Makefile with a couple of commands that check your programming environment, clean up data, or execute `FinalTask`.
+2. A [GNU Make](https://www.gnu.org/software/make/) `Makefile` with a couple of commands that check your programming environment, clean up data, or execute `FinalTask`.
 
-The upshot of this arrangement is that, once everything is in place and you're in the root folder of your Docker container, you can type `make data` into the terminal and Luigi will run all the tasks that haven't been run yet. One command to re-create any parts that are missing or the entire project. (There's also `make data_clean` to remove all the stuff you just created, and both can be customized).
+The upshot of this arrangement is that, once everything is in place and you're in the root folder of your Docker container, you can type `make data` into the terminal and Luigi will run all the tasks that haven't been run yet. One command is all you need to re-create any parts that are missing, or even the entire project. (There's also `make data_clean` to remove all the stuff you just created, and both can be customized).
 
 I adapted the Cookiecutter folder structure to include a folder for Docker operations and to remove stuff that I wasn't using, and wound up with this:
 
@@ -83,7 +83,7 @@ The most useful source of Docker commands is not the official documentation, but
 
 When I needed to update my figure legends, for example, I went back to the parent class `BaseMap` (which inherits from `Luigi.Task`) and updated the method `make_legends()`, thus updating the 7 different descendant tasks that created the maps for the paper. I deleted the existing figures so that Luigi would run the task again, and `make data` promptly made the new figures for me.
 
-For more about project organization and Luigi, check out [A Quick Guide to Organizing [Data Science] Projects (updated for 2018)](https://medium.com/outlier-bio-blog/a-quick-guide-to-organizing-data-science-projects-updated-for-2016-4cbb1e6dac71) and [Why we chose Luigi for our NGS pipelines](https://medium.com/outlier-bio-blog/why-we-chose-luigi-for-our-ngs-pipelines-5298c45a74fc). For the best introduction to Luigi syntax and motivation, check out minute 8:25 of [this presentation](https://www.youtube.com/watch?v=jpkZGXrhZJ8) from PyCon 2017. For a more complex machine learning project built around the same principles, check out [this presentation](https://www.youtube.com/watch?v=jRkW5Uf58K4) (and [repo](https://github.com/crazzle/pydata_berlin_2018)) from PyData Berlin 2018.
+For more about project organization and Luigi, check out [A Quick Guide to Organizing [Data Science] Projects (updated for 2018)](https://medium.com/outlier-bio-blog/a-quick-guide-to-organizing-data-science-projects-updated-for-2016-4cbb1e6dac71) and [Why we chose Luigi for our NGS pipelines](https://medium.com/outlier-bio-blog/why-we-chose-luigi-for-our-ngs-pipelines-5298c45a74fc). For the best introduction to Luigi syntax and motivation, check out [this presentation](https://www.youtube.com/watch?v=jpkZGXrhZJ8) from PyCon 2017 starting at minute 8:25. For a more complex machine learning project built around the same principles, check out [this presentation](https://www.youtube.com/watch?v=jRkW5Uf58K4) (and [repo](https://github.com/crazzle/pydata_berlin_2018)) from PyData Berlin 2018.
 
 # How to set up a Docker work environment
 ## Make the folders
@@ -135,7 +135,7 @@ As for the commands here, a few notes:
 
 You'll know that your Dockerfile works once you can run this command from inside the `repo_root/docker` folder...
 
-`$ docker build -t image_name1 .`
+`$ docker build -t image_name .`
 
 ... and get a success message:
 
@@ -155,7 +155,7 @@ This is what the command is doing:
 
 * `--name container_name`: Assigns a new name to the container you are about to instantiate.
 * `-p 9999:8888`: Connects port 8888 in the container (where Jupyter is!) with port 9999 on your machine. 
-* `-v /path/to/repo_root:/app`: Mounts local folder `repo_root` to the folder `app` in the container.  Changes in one folder will be reflected in the other.  More importantly, changes in the container will _remain_ in the local folder after the container is closed or deleted. That's how our container will export its results to the outside world.
+* `-v /path/to/repo_root:/app`: Mounts folder `repo_root` on your computer to folder `app` in the container.  Changes in one will be reflected in the other.  More importantly, changes in the container will _remain_ in the local folder after the container is closed or deleted. That's how our container will export its results to the outside world.
 
 Your terminal should produce output like this:
 ```
@@ -185,7 +185,7 @@ To run a bash shell inside the container, open a new terminal window on your loc
 Now you should see that the terminal prompt changed, and that you are now inside the container!  Check out which programs are installed with `pip list`, and get ready to start installing more stuff.
 
 ## Update the image with new packages
-From this point, I normally keep three terminal windows open: one running Jupyter inside the container, one running a bash shell to my local machine, one running a bash shell to the container. I edit the container's contents from the inside or by changing the folders that are mounted to the container (in this case, everything in `repo_root`). If you use VS Code, note that it has useful plugins for seeing currently available images and containers.
+From this point, I normally keep three terminal windows open: one running Jupyter inside the container, one running a bash shell to my local machine, one running a bash shell to the container. I sometimes edit the container's contents from the inside by creating files with `make data`, and sometimes from the outside by changing the folders that are mounted to the container (in this case, everything in `repo_root`). If you use VS Code, note that it has useful plugins for seeing currently available images and containers.
 
 As you start working, you'll figure out what new Python packages you need for your project.  After you install them in the container, remember to occasionally export those dependencies to `requirements.txt`.  Do so by running, from inside the container:
 
@@ -213,9 +213,8 @@ class Task3(luigi.Task):
     
     def requires(self):
         # 
-        yield Task1()
-        yield Task2()
-
+        return [Task1(), Task2()]
+        
     def output(self):
         return luigi.LocalTarget(self.output_file)
 
@@ -225,38 +224,92 @@ class Task3(luigi.Task):
         # The file gets exported to CSV
         df.to_csv(self.output_file)
 ```
-When a task is executed, Luigi will first check all the dependencies listed in `requires()`, verify that they've been met, and then run all the commands in `run()`. These commands should produce some sort of result (say, a file called `conclusions.csv`) and write it to a particular place in the folder structure (say, `data/processed/`). 
+When a task is executed, Luigi will first check all the dependencies listed in `requires()`, verify that they've been met, and then run all the commands in `run()`. These commands should produce some sort of result (here `conclusions.csv`) and write it to a particular place in the folder structure (here `data/processed/`). 
 
-The `output()` method serves two purposes.  First, it allows Luigi to check whether the result has been generated. `output()` returns a `Target` object tied to a filename. `Target` has a single method, `exists()`, which returns True if there is in fact a file at the declared location. Luigi uses the `Target` object returned by the `output()` method to determine whether the task is complete or needs to be re-run.  Thus, if you've edited the contents of `run()` and want to generate a new version of the results, delete the output file and run Luigi again (most easily through the `make data` command).
+The `output()` method serves two purposes.  First, it allows Luigi to check whether the result has been generated. `output()` returns a `Target` object tied to a filename. `Target` has a single method, `exists()`, which returns True if there is in fact a file at the declared location. Luigi uses the `Target` object returned by the `output()` method to determine whether the task is complete or needs to be re-run.  Thus, if you've edited the contents of your Task3 above and want to generate a new version of the results, delete `conclusions.csv` and run `make data` again.
 
-The second purpose of `output()` is that it returns the `Target` object, so that the next task can take it as input. This is how the output of one task becomes the input of the next. You can see some examples of how tasks are chained [here](http://mattiacinelli.com/tutorial-on-luigi-pipeline-part-2-examples/) and [here](https://intoli.com/blog/luigi-jupyter-notebooks/).
+The second purpose of `output()` is that it returns the `Target` object, so that the next task can take it as input. This is how the output of one task becomes the input of the next. If we wanted to access the file produced by `Task2` above, we could access its file path as `self.input()[1].path`. You can see some examples of how tasks are chained [here](http://mattiacinelli.com/tutorial-on-luigi-pipeline-part-2-examples/) and [here](https://intoli.com/blog/luigi-jupyter-notebooks/).
 
-For our purposes, though, there are only three things to remember:
+For simple usage, though, there are only three things to remember about Luigi:
 1. `run()` should generate some file
 2. `output()` should point to that file
 3. `requires()` should list the predecessor tasks that produce the pre-requisites for this one.
+
+Also, if you want to run a task without all the others, you can invoke it individually after cd'ing into the `data` folder:
+
+`$ PYTHONPATH='../src/data_tasks' python -m luigi --module [SCRIPT_NAME] [TASK_NAME] --local-scheduler`
 
 **A note about folder context**: The Makefile is designed such that tasks are run from the `data` folder. Thus, you should write your tasks as if they will always be run from inside `data`. That's why, in order to place the output at `repo_root/data/processed/`, I only have to specify `processed/`.
 
 ## How this project uses Luigi workflows
 
-I started out with an older version of my workflow, designed in Jupyter. I removed all those files from my folder structure and added their parts back in one-by-one, as Luigi Tasks written out in separate python scripts.  I strove for each task to represent a single operation with the data, and used class inheritance to keep the code as non-redundant as possible. I then called all the tasks I'd written as requirements in a the original task that came with the folder structure, `FinalTask`. I could also have designed this such that all the tasks were linked with each other and `FinalTask` required only the penultimate task in that inheritance list.
+I started out with an older version of my workflow, designed in Jupyter. I removed all those files from my folder structure and added their operations back in one-by-one, as Luigi Tasks written out in separate python scripts.  I strove for each task to represent a single operation with the data, and used class inheritance to keep the code as non-redundant as possible. I then called all the tasks I'd written as requirements in `FinalTask`, which wound up looking like this:
 
-I used the folder structure heavily, making data flow from folders such as `raw` and `external` to `interim` and `processed`. I wrote tasks such that they referred to this folder structure, though the `Target` objects passed around by `output()` functions can also be used to transmit the location of data without ever having to hard-code it into the functions.
+```python
+import luigi
+
+from sys import path
+path.insert(0, '/app/src/data_tasks')
+path.insert(0, '/app/src/visualization')
+
+from extract_maps import UnzipFiles
+from extract_samples import CleanAndExportSamples
+from bubbles import AllSitesMap
+from bubbles import AllContaminantsMap
+from bubbles import EachContaminantMaps
+from bubbles import ArsenicAndFluorideMap
+from bubbles import GeologyMaps
+from sample_town_interactions import WhichTownsAreNearSites
+from aggregate_nearby_sites import AggregateNearbySites
+from make_summaries import ArsenicSummary
+from make_summaries import FluorideSummary
+from chloropleths import ArsenicMap
+from chloropleths import FluorideMap
+
+class FinalTask(luigi.Task):
+    # Global execution variables. Change here for whole project.
+    titles = False # Do figures have titles?
+    radius = 5 # Radius for contamination effects
+    geo_maps = ['arsenic','fluoride'] # Make geology maps for these contaminants
+    zipped_files = ['towns','country','states','municipalities']
+
+    def requires(self):
+        yield UnzipFiles(self.zipped_files)
+        yield CleanAndExportSamples()
+        yield AllSitesMap(self.titles)
+        yield AllContaminantsMap(self.titles)
+        yield EachContaminantMaps(self.titles)
+        yield ArsenicAndFluorideMap(self.titles)
+        yield WhichTownsAreNearSites(self.radius)
+        yield AggregateNearbySites(self.radius)
+        yield ArsenicSummary()
+        yield FluorideSummary()
+        yield ArsenicMap(self.titles)
+        yield FluorideMap(self.titles)
+        yield GeologyMaps(contaminants=self.geo_maps, title=self.titles)
+
+    def output(self):
+        pass
+
+    def run(self):
+        pass
+```
+
+ I could also have designed this such that all the tasks were linked with each other and `FinalTask` required only the penultimate task in that dependency list. I relied on the folder structure heavily, making data flow from folders such as `raw` and `external` to `interim` and `processed`. I wrote tasks such that they referred to locations this folder structure. An alternative way to do it is to rely more on the wrapper `self.input()` within each task's `run()` to refer to the outputs of upstream tasks. This allows the user to transmit the location of data between tasks without ever hard-coding file paths into intermediate tasks.
 
 # Project results
-I cross-referenced the 3,951 sampled sites with over 192,000 towns around the country, filtering the latter for proximity to the former. 
+I cross-referenced the 3,951 sampled sites with over 192,000 towns around the country, filtering the latter for proximity to the former. These are the locations of all the sampling sites:
 
 ![all_sites](/img/11_reproducible-science/all_sites.png)
 
-I mapped and plotted the location of six different contaminants:
+I mapped and plotted the location of six different contaminants wherever they exceeded the healthy limit:
 
 ![All contaminants](/img/11_reproducible-science/all_contaminants.png)
 
-For each town, I assumed that the population was exposed to the average contamination of all the sites within 5 km, and used this to estimate several public health indicators related to arsenic and fluoride contamination.  As one salient example, I calculated that chronic exposure would probably be responsible for an additional 13,000 lifetime cases of cancer in the country, affecting mostly the arid states of Durango and Jalisco.
+For each town, I assumed that the population was exposed to the average contamination of all the sites within 5 km, and used this to estimate several public health indicators related to arsenic and fluoride contamination.  As one salient example, I calculated that chronic arsenic exposure would probably be responsible for an additional 13,000 lifetime cases of cancer in the country, affecting mostly the arid states of Durango and Jalisco.
 
 ![summary_arsenic](/img/11_reproducible-science/summary_arsenic.png)
 
-I estimate that about half (56%) of the Mexican population lives in a town within 5 km of a sampling site, 3.05 million of them are exposed to excessive fluoride, and 8.81 million are exposed to excessive arsenic. 
+I estimate that about half (56%) of the Mexican population lives in a town within 5 km of a sampling site, 3.05 million of them are exposed to excessive fluoride, and 8.81 million are exposed to excessive arsenic. The results of this data analysis are currently under peer review, in preparation for publication. 
 
-The results of this data analysis are currently under peer review, in preparation for publication. You can find my full code in this project's [GitHub Repo](https://github.com/DanielMartinAlarcon/Arsenic-and-Fluoride-Mexico), and its Docker image in the project's [DockerHub Repo](https://hub.docker.com/r/danielmartinalarcon/arsenic-and-fluoride-in-mexico).
+You can find my full code in this project's [GitHub Repo](https://github.com/DanielMartinAlarcon/Arsenic-and-Fluoride-Mexico), and its Docker image in the project's [DockerHub Repo](https://hub.docker.com/r/danielmartinalarcon/arsenic-and-fluoride-in-mexico).
