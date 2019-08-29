@@ -68,6 +68,10 @@ A GeoDataFrame can contain points or polygons. Both will be rendered automatical
 
 ![geopandas](/img/12_geopandas/geo3.png)
 
+With minimal processing, the GeoDataFrame above becomes the figure below.
+
+![geopandas](/img/12_geopandas/geo4.png)
+
 
 ```python
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -110,40 +114,104 @@ for l in cax.yaxis.get_ticklabels():
 ax.set_title('Earthquake Risk in the SF Bay Area', fontsize=20, pad=10);
 ```
 
-![geopandas](/img/12_geopandas/geo4.png)
-
-# [Under construction]
-I'm still working on the content below, please come back later.
-
-# Stacking polygon layers
-
-<!-- ![geopandas](/img/12_geopandas/geo1.png) -->
-
 # Bubble plots
+GeoPandas maps can be stacked as layers of varying transparency in a regular matplotlib axes. If you then plot a dataset on top of the map, using lat/lon as the values of x/y, you can produce bubble plots that are very information-rich. Here is an example that shows the average arsenic concentration for sampling sites in several major cities of the state of Durango, Mexico.
 
-
+![geopandas](/img/12_geopandas/geo5.png)
 
 ```python
+
+# GeoDataFrame of cities with their average arsenic concentrations
+# (column 'arsenic', float) and a custom color category that corresponds
+# to different contamination levels (column 'colors_as', string)
+cities = cities_dgo2.dropna(subset=['arsenic'])
+
+# The size of the markers (area) is a multiple of that city's 
+# arsenic concentration
+markersize = cities['arsenic'] / 10 * 200
+
+fig = plt.figure(figsize=(10,10))
+ax = fig.add_subplot(1,1,1)
+
+# Plots the outline of the state
+durango_state.plot(ax=ax, color='white', edgecolor='black', linewidth=1);
+# Plots the outline of the municipalities, in a lighter grey tone
+durango.plot(ax=ax, color='None', edgecolor='black', alpha=0.2);
+# Plots the cities
+cities.plot(ax=ax, color=cities['colors_as'], 
+            markersize=markersize, alpha=1,
+            edgecolor='black')
+
+ax.set_title('Arsenic Concentration (µg/L)', fontsize=25, pad=10);
+
+# Removes ticks and lat/lon labels
+ax.tick_params(
+    axis='both', bottom=False, left=False,         
+    labelbottom=False, labelleft=False) 
+# Sets figure limits
+ax.set_xlim(-107.5, -102.4);
+ax.set_ylim(22.2, 27);
+
+
+# The legend is generated not from the data that you see, but from 
+# several other layers that are plotted outside the figure (at lat=lon=0).
+# This makes it easier to populate the legend box with circles of exact 
+# sizes and colors.
+
+ax.scatter([0], [0], c='xkcd:silver', alpha=1, s=5/10*200,
+            label='0 - 10', edgecolor='black')
+ax.scatter([0], [0], c='xkcd:orange', alpha=1, s=10/10*200,
+            label='10 - 25', edgecolor='black')
+ax.scatter([0], [0], c='xkcd:orangered', alpha=1, s=25/10*200,
+            label='25 - 50', edgecolor='black')
+ax.scatter([0], [0], c='xkcd:maroon', alpha=1, s=50/10*200,
+            label='50+', edgecolor='black')
+
+ax.legend(scatterpoints=1, frameon=True,
+        labelspacing=0.6, loc='lower left', fontsize=20, 
+        bbox_to_anchor=(0.03,0.03), title_fontsize=20);
+
+plt.show()
 ```
 
-```python
-```
+It's also possible to add multiple legend boxes to the same map, with patches of precise shape and color.
+
+![geopandas](/img/12_geopandas/geo6.png)
 
 ```python
-```
+import matplotlib.patches as patches
 
-```python
-```
+# Adds three phantom data points to the map, plotted off-screen at lat=lon=0
+for area in [1, 10, 100]:
+    ax.scatter([0], [0], c='black' , alpha=0.9, s=area*100,
+                label=str(area) + ' x')
 
-```python
-```
+# Creates the legend with black circles
+legend1 = ax.legend(scatterpoints=1, frameon=True,
+        labelspacing=1, loc='lower left', fontsize=40, bbox_to_anchor=(0.03,0.05),
+            title="Concentration\n(Multiples of\nlimit value)", title_fontsize=40)
 
-```python
-```
+# Adds the legend above to the current axes in the figure
+fig.gca().add_artist(legend1)
+    
+list_of_ions = ['arsenic', 'cadmium','chromium','mercury','lead','fluoride']
+color_dict = {'arsenic':'red',
+            'cadmium':'darkcyan',
+            'chromium':'magenta',
+            'mercury':'brown',
+            'lead':'green',
+            'fluoride':'blue'}
+patch_list =[]
 
-```python
-```
+# Creates a rectangular patch for each contaminant, using the colors above
+for ion in list_of_ions:
+    label = ion.capitalize()
+    color = color_dict[ion]
+    patch_list.append(patches.Patch(facecolor=color, label=label, alpha=0.9, 
+                                    linewidth=2, edgecolor='black'))
 
-```python
+# Creates a legend with the list of patches above.
+ax.legend(handles=patch_list, fontsize=40, loc='lower left',
+        bbox_to_anchor = (.2,0.05), title_fontsize=45)
 ```
 
