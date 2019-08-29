@@ -2,7 +2,7 @@
 title: Predictors of Goundwater Arsenic
 subtitle: How to calculate feature importance
 image: /img/7_groundwater-arsenic/poison.png
-date: 2019-01-01 00:05:00
+date: 2019-01-01 00:45:00
 ---
 
 The State of Durango, in northern Mexico, is one of those affected with significant natural presence of arsenic in groundwater (for a national analysis, see [this previous post](https://danielmartinalarcon.github.io/2018-12-14-water-pollution-in-mexico/)).  One of the problems with studying arsenic is that it's expensive to measure it accurately.  But what if we could reliably predict the arsenic content of a water sample, based on other characteristics of the water that are easier to determine?  
