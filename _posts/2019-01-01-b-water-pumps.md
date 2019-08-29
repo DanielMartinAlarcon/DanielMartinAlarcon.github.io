@@ -2,15 +2,17 @@
 title: fast.ai Deep Learning vs XGBoost on tabular data
 subtitle: The case of broken water pumps in Tanzania
 image: /img/6_water-pumps/pump.png
-date: 2019-01-01 00:49:00
+date: 2019-01-01 01:49:00
 ---
+
+I use the [fast.ai](https://www.fast.ai/) deep learning library for one of its newest applications: predictive modeling on tabular data.  I compare its performance against the incumbent best tool in the field, gradient boosting with [XGBoost](https://xgboost.readthedocs.io/en/latest/). At least for this dataset, XGBoost achieves a higher accuracy and remains a system to be reckoned with. 
 
 The Tanzanian Ministry of Water recently conducted a survey of tens of thousands of water pumps that had been installed around the country over the last several decades.  The Ministry knew what kind of pumps existed, which organizations had installed them, and how the pumps were managed.  The survey added one last important detail to the existing knowledge: did the pumps still work? 
 
 The Ministry's data about the pumps and their status was collected into a dataset and organized into a competition by [DrivenData](https://www.drivendata.org/competitions/7/pump-it-up-data-mining-the-water-table/), a platform that organizes data science competitions around problems with 
 humanitarian impact.  Predictive analytics on this dataset could allow the Ministry to know in advance which pumps are most likely to be non-functional, so that they can triage their repair efforts.  It's hard to find much simpler examples of how a good predictive model can directly save time and money.
 
-In this project, I use the [fast.ai](https://www.fast.ai/) deep learning library for one of its newest applications: predictive modeling on tabular data.  I compare its performance against the incumbent best tool in the field, gradient boosting with [XGBoost](https://xgboost.readthedocs.io/en/latest/). At least for this dataset, XGBoost achieves a higher accuracy and remains a system to be reckoned with. You can find the full notebook for this analysis on the [Github repo](https://github.com/DanielMartinAlarcon/water-pumps-2).
+You can find the full notebook for this analysis on the [Github repo](https://github.com/DanielMartinAlarcon/water-pumps-2).
 
 ![Pumps](/img/6_water-pumps/pump1.png)
 

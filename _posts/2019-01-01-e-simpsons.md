@@ -2,10 +2,10 @@
 title: Simpson Says
 subtitle: Natural Language Processing and web app deployment
 image: /img/8_simpson/homer.png
-date: 2019-01-01 00:46:00
+date: 2019-01-01 01:46:00
 ---
 
-**TL;DR**: I used simple NLP to write a search function that will compare a user query to each line of dialogue in ~600 episodes of The Simpsons, and deployed it in a live web application. This was a one-week team project with other data scientists and web developers at Lambda School, and resulted in [a fully functional website](https://simpsonssays.netlify.com/) where you can access our models yourself. The full repo for this project is [here](https://github.com/simpson-says/buildweek3-simpsons-says-ds).
+I used simple NLP to write a search function that will compare a user query to each line of dialogue in ~600 episodes of The Simpsons, and deployed it in a live web application. This was a one-week team project with other data scientists and web developers at Lambda School, and resulted in [a fully functional website](https://simpsonssays.netlify.com/) where you can access our models yourself. The full repo for this project is [here](https://github.com/simpson-says/buildweek3-simpsons-says-ds).
 
 # Using text similarity to find iconic quotes.
 The full script for about 27 seasons and 600 episodes of the show are available [on Kaggle](https://www.kaggle.com/wcukierski/the-simpsons-by-the-data). A relatively small amount of processing is needed to create a semantic index of all the existing quotes, to which new quotes can be compared for similarities.  We did that here using the Natural Language Toolkit ([NLTK](https://www.nltk.org/)) and the semantic analysis tool [Gensim](https://radimrehurek.com/gensim/). 

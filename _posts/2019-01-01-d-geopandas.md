@@ -2,7 +2,7 @@
 title: The GeoPandas Cookbook
 subtitle: Simple recipes for beautiful data maps
 image: /img/12_geopandas/geo1.png
-date: 2019-01-01 00:47:00
+date: 2019-01-01 01:47:00
 ---
 
 For anyone used to data science with pandas, GeoPandas is the simplest way to perform geospatial operations and (most importantly) visualize your geographic data. GeoPandas saves you from needing to use specialized spatial databases such as PostGIS. This cookbook contains the recipes that I've found myself using over and over again with GeoPandas, many of them cobbled together from bits scattered throughout Stack Overflow and the official documentation.

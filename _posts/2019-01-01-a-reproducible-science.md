@@ -2,10 +2,9 @@
 title: Reproducible data science with Docker and Luigi
 subtitle: The case of arsenic and fluoride in Mexican drinking water
 image: /img/11_reproducible-science/all_contaminants_cropped.png
-date: 2019-01-01 00:50:00
+date: 2019-01-01 01:50:00
 ---
 
-# TL;DR
 I describe a workflow that uses [Docker](https://www.docker.com/) and [Luigi](https://luigi.readthedocs.io/en/stable/index.html) to create fully transparent and reproducible data analyses. End users can repeat the original calculations to produce all the final tables and figures starting from the original raw data. End users (and the author, at a later date) can easily make isolated changes to the middle of the pipeline and know that their changes propagate to all the other steps in the process. I demonstrate this workflow by applying it to a paper (currently under peer review) that studies drinking water contamination in Mexico. You can find my full code in this project's [GitHub Repo](https://github.com/DanielMartinAlarcon/Arsenic-and-Fluoride-Mexico), and its Docker image in the project's [DockerHub Repo](https://hub.docker.com/r/danielmartinalarcon/arsenic-and-fluoride-in-mexico).
 
 ![All contaminants](/img/11_reproducible-science/all_contaminants.png)
