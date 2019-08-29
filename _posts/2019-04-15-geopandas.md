@@ -174,7 +174,7 @@ ax.legend(scatterpoints=1, frameon=True,
 
 plt.show()
 ```
-
+# Multiple legend boxes
 It's also possible to add multiple legend boxes to the same map, with patches of precise shape and color.
 
 ![geopandas](/img/12_geopandas/geo6.png)
