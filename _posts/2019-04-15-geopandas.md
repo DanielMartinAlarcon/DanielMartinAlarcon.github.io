@@ -8,9 +8,13 @@ For anyone used to data science with pandas, GeoPandas is the simplest way to pe
 
 When you start out, make sure to scan the [official GeoPandas documentation](http://geopandas.org/index.html) and this great [course from the University of Helsinki](https://automating-gis-processes.github.io/2017/index.html). Happy mapping!
 
+# [Under construction]
+I'm still working on the content below, please come back later.
+
 # Stacking polygon layers
 
-![geopandas](/img/12_geopandas/geo1.png)
+<!-- ![geopandas](/img/12_geopandas/geo1.png) -->
+
 
 # Bubble plots
 
