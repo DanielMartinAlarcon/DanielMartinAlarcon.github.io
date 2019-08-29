@@ -67,7 +67,7 @@ geodf = geopandas.read_file('PATH/TO/custom_map.geojson/')
 geodf = geopandas.read_file('PATH/TO/folder_with_SHP_files/')
 ```
 
-# Basic plotting and Chloropleths
+# Chloropleths
 A GeoDataFrame can contain points or polygons. Both will be rendered automatically with `geodf.plot()`.  If you plot a GeoDataFrame with Polygons in the geometry column, you can use the parameter `column` to assign each polygon a color based on the (numerical) value of that column. Here I also used a trick from the [AxesGrid toolkit](https://matplotlib.org/mpl_toolkits/axes_grid/users/overview.html) to add a custom colorbar.
 
 ![geopandas](/img/12_geopandas/geo4.png)
