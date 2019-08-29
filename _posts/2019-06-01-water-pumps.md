@@ -1,6 +1,6 @@
 ---
-title: Water pumps in Tanzania
-subtitle: fast.ai Deep Learning vs XGBoost on a tabular dataset.
+title: fast.ai Deep Learning vs XGBoost on tabular data
+subtitle: The case of broken water pumps in Tanzania
 image: /img/6_water-pumps/pump.png
 ---
 
