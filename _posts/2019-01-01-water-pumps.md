@@ -2,6 +2,7 @@
 title: fast.ai Deep Learning vs XGBoost on tabular data
 subtitle: The case of broken water pumps in Tanzania
 image: /img/6_water-pumps/pump.png
+date: 2019-01-01 00:02:00
 ---
 
 The Tanzanian Ministry of Water recently conducted a survey of tens of thousands of water pumps that had been installed around the country over the last several decades.  The Ministry knew what kind of pumps existed, which organizations had installed them, and how the pumps were managed.  The survey added one last important detail to the existing knowledge: did the pumps still work? 

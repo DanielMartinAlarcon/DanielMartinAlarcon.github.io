@@ -2,6 +2,7 @@
 title: Reproducible data science with Docker and Luigi
 subtitle: The case of arsenic and fluoride in Mexican drinking water
 image: /img/11_reproducible-science/all_contaminants_cropped.png
+date: 2019-01-01 00:01:00
 ---
 
 # TL;DR
