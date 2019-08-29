@@ -1,6 +1,6 @@
 ---
 title: Water pumps in Tanzania
-subtitle: Fast.ai Deep Learning vs XGBoost on a tabular dataset.
+subtitle: fast.ai Deep Learning vs XGBoost on a tabular dataset.
 image: /img/6_water-pumps/pump.png
 ---
 
@@ -22,7 +22,12 @@ Extensive data cleaning and feature engineering were needed to process the data 
 The tabular functionality in fast.ai combines training, validation, and (optionally) testing data into a single TabularDataBunch object. This structure makes it possible to tune pre-processing steps on the training data and then apply them equally to the validation and test data.  Thus, with fast.ai the process of normalizing, inputing missing values, and determining the categories for each categorical variable is largely automated. More interestingly, as we'll see below, this processed data can be used to fit models from other libraries.
 
 ```python
-# 'train' is all the training data, including the dependent variable. It was cleaned in earlier steps but still contains nulls and hasn't been normalized yet. 'dep_var' is the name of the dependent variable; 'cat_names', and 'cont_names' are lists of the categorical and continuous features, respectively. 'train' will be used as the source of both training and validation data. 
+# 'train' is all the training data, including the dependent variable. 
+# It was cleaned in earlier steps but still contains nulls and hasn't 
+# been normalized yet. 'dep_var' is the name of the dependent variable;
+#  'cat_names', and 'cont_names' are lists of the categorical and 
+# continuous features, respectively. 'train' will be used as the 
+# source of both training and validation data. 
 
 
 # Transformations to be applied later
@@ -33,7 +38,10 @@ test = TabularList.from_df(X_test,
                            cat_names=cat_names, 
                            cont_names=cont_names)
 
-# Creates the overall TabularDataBunch ('data'), which includes training data (the first 50,000 rows in 'train'), validation data (the last 9,400 rows in 'train'), and test data (the TabularList 'test').
+# Creates the overall TabularDataBunch ('data'), which includes 
+# training data (the first 50,000 rows in 'train'), validation 
+# data (the last 9,400 rows in 'train'), and test data 
+# (the TabularList 'test').
 data = (TabularList.from_df(train, 
                             cat_names=cat_names, 
                             cont_names=cont_names, 
@@ -131,10 +139,12 @@ Regardless of the actual deep learning it is designed to do, the fast.ai library
 
 ```python
 def get_proc_df(tll):
-    """Get processed xs and ys from a tabular `LabelList` with a single value for label such as FloatList.
+    """Get processed xs and ys from a tabular `LabelList` 
+            with a single value for label such as FloatList.
        For example from `TabularDataBunch.train_ds`.
        :param tll: A tabular `LabelList`. 
-       :returns: A tuple of `(x,y)` where `x` is a pandas `DataFrame` and `y` is a numpy array.
+       :returns: A tuple of `(x,y)` where `x` is a pandas 
+                    `DataFrame` and `y` is a numpy array.
     """
     x_vals = np.concatenate([tll.x.codes, tll.x.conts], axis=1)
     x_cols = tll.x.cat_names + tll.x.cont_names
