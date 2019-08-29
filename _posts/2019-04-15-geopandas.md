@@ -51,7 +51,11 @@ geopandas.datasets.get_path('naturalearth_lowres')
 world = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))
 # Subsets the GeoDataFrame
 usa = world[world.name == "United States of America"]
+# Plots
+world.plot();
 ```
+![geopandas](/img/12_geopandas/geo7.png)
+
 Note how the maps also contain some other useful information like GDP and population.
 
 ![geopandas](/img/12_geopandas/geo2.png)
@@ -66,11 +70,9 @@ geodf = geopandas.read_file('PATH/TO/folder_with_SHP_files/')
 # Basic plotting and Chloropleths
 A GeoDataFrame can contain points or polygons. Both will be rendered automatically with `geodf.plot()`.  If you plot a GeoDataFrame with Polygons in the geometry column, you can use the parameter `column` to assign each polygon a color based on the (numerical) value of that column. Here I also used a trick from the [AxesGrid toolkit](https://matplotlib.org/mpl_toolkits/axes_grid/users/overview.html) to add a custom colorbar.
 
-![geopandas](/img/12_geopandas/geo3.png)
-
-With minimal processing, the GeoDataFrame above becomes the figure below.
-
 ![geopandas](/img/12_geopandas/geo4.png)
+
+![geopandas](/img/12_geopandas/geo3.png)
 
 
 ```python
@@ -120,7 +122,6 @@ GeoPandas maps can be stacked as layers of varying transparency in a regular mat
 ![geopandas](/img/12_geopandas/geo5.png)
 
 ```python
-
 # GeoDataFrame of cities with their average arsenic concentrations
 # (column 'arsenic', float) and a custom color category that corresponds
 # to different contamination levels (column 'colors_as', string)
@@ -188,27 +189,34 @@ for area in [1, 10, 100]:
 
 # Creates the legend with black circles
 legend1 = ax.legend(scatterpoints=1, frameon=True,
-        labelspacing=1, loc='lower left', fontsize=40, bbox_to_anchor=(0.03,0.05),
-            title="Concentration\n(Multiples of\nlimit value)", title_fontsize=40)
+        labelspacing=1, loc='lower left', fontsize=40, 
+        bbox_to_anchor=(0.03,0.05),
+        title="Concentration\n(Multiples of\nlimit value)", 
+        title_fontsize=40)
 
 # Adds the legend above to the current axes in the figure
 fig.gca().add_artist(legend1)
     
-list_of_ions = ['arsenic', 'cadmium','chromium','mercury','lead','fluoride']
+list_of_ions = ['arsenic', 'cadmium','chromium',
+                'mercury','lead','fluoride']
+
 color_dict = {'arsenic':'red',
             'cadmium':'darkcyan',
             'chromium':'magenta',
             'mercury':'brown',
             'lead':'green',
             'fluoride':'blue'}
-patch_list =[]
 
 # Creates a rectangular patch for each contaminant, using the colors above
+patch_list =[]
 for ion in list_of_ions:
     label = ion.capitalize()
     color = color_dict[ion]
-    patch_list.append(patches.Patch(facecolor=color, label=label, alpha=0.9, 
-                                    linewidth=2, edgecolor='black'))
+    patch_list.append(patches.Patch(facecolor=color, 
+                                    label=label, 
+                                    alpha=0.9, 
+                                    linewidth=2, 
+                                    edgecolor='black'))
 
 # Creates a legend with the list of patches above.
 ax.legend(handles=patch_list, fontsize=40, loc='lower left',
