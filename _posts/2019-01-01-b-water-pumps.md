@@ -5,7 +5,9 @@ image: /img/6_water-pumps/pump.png
 date: 2019-01-01 01:49:00
 ---
 
-I use the [fast.ai](https://www.fast.ai/) deep learning library for one of its newest applications: predictive modeling on tabular data.  I compare its performance against the incumbent best tool in the field, gradient boosting with [XGBoost](https://xgboost.readthedocs.io/en/latest/). At least for this dataset, XGBoost achieves a higher accuracy and remains a system to be reckoned with. 
+I use the [fast.ai](https://www.fast.ai/) deep learning library for one of its newest applications: predictive modeling on tabular data.  I compare its performance against the incumbent best tool in the field, gradient boosting with [XGBoost](https://xgboost.readthedocs.io/en/latest/), as well as against various scikit-learn classifiers. Despite recent prominence on other tabular datasets, in this case fast.ai falls behind XGBoost and sklearn's RandomForestClassifier.
+
+# Background
 
 The Tanzanian Ministry of Water recently conducted a survey of tens of thousands of water pumps that had been installed around the country over the last several decades.  The Ministry knew what kind of pumps existed, which organizations had installed them, and how the pumps were managed.  The survey added one last important detail to the existing knowledge: did the pumps still work? 
 
@@ -136,52 +138,96 @@ And then again for a couple more, inching ahead so long as the validation loss k
 
 By saving my model after every couple of fitting epochs, I can keep going until it starts overfitting (when the validation loss starts creeping up again). I did that a couple of times, then reverted to the last batch of fitting that had still improved the model.  In the end, I was able to get an accuracy of `79.2%`, which fast.ai automatically calculates on the validation set in the same TabularDataBunch.
 
-# XGBoost
-Regardless of the actual deep learning it is designed to do, the fast.ai library is useful for pre-processing data for all sorts of models.  Transformations are developed on the test set, and applied equally to validation and testing sets. Extracting these from the TabularDataBunch object is not automatic, but it can be done with a simple function ([source](https://forums.fast.ai/t/tabulardatabunch-to-pandas-dataframe/30947/6)).
+# Other models
+Regardless of the actual deep learning it is designed to do, the fast.ai library is useful for pre-processing data for all sorts of models.  It normalizes, creates categories, and fills in missing values.  I wrote a custom function to retrieve that data from the TabularDataBunch object, and used an ordinal encoder to encode by the categories present in the training dataset.
 
 
 ```python
-def get_proc_df(tll):
-    """Get processed xs and ys from a tabular `LabelList` 
-            with a single value for label such as FloatList.
-       For example from `TabularDataBunch.train_ds`.
-       :param tll: A tabular `LabelList`. 
-       :returns: A tuple of `(x,y)` where `x` is a pandas 
-                    `DataFrame` and `y` is a numpy array.
+from category_encoders.binary import BinaryEncoder
+def get_proc_df(tdb, cat_names, cont_names):
+    """Get processed xs and ys from a TabularDataBunch with training and validation
+     datasets.
+       :param tdb: A TabularDataBunch. 
+       :param cat_names: Array of strings for the categorical variables
+       :param cont_names: Array of strings for the continuous variables
+       :returns: A tuple of `(X_train, X_valid, y_train, y_valid)` 
+        where `X_` items are a pandas `DataFrames` and `y` items are numpy arrays.
     """
-    x_vals = np.concatenate([tll.x.codes, tll.x.conts], axis=1)
-    x_cols = tll.x.cat_names + tll.x.cont_names
-    x_df = pd.DataFrame(data=x_vals, columns=x_cols)[
-            [c for c in tll.inner_df.columns if c in x_cols] ] # Retain order
-    # Reconstruct ys to apply log if specified
-    y_vals = np.array([i.obj for i in tll.y])
-    return x_df, y_vals
+    
+    def list_to_df(tll):
+        """
+        Takes a tabular list (the training or validation data in this 
+        TabularDataBunch) and returns its items as a pandas DataFrame.
+        """
+        x_vals = np.concatenate([tll.x.codes, tll.x.conts], axis=1)
+        x_cols = tll.x.cat_names + tll.x.cont_names
+        x_df = pd.DataFrame(data=x_vals, columns=x_cols)[
+                [c for c in tll.inner_df.columns if c in x_cols] ] # Retain order
+        y_vals = np.array([i.obj for i in tll.y])
+        return x_df, y_vals
+    
+    X_train, y_train = list_to_df(tdb.train_ds)
+    X_valid, y_valid = list_to_df(tdb.valid_ds)
+    
+    # Binary encode the categorical variables, according to their values in 
+    # the training dataset
+    encoder = BinaryEncoder(cols=cat_names)
+    X_train = encoder.fit_transform(X_train)
+    X_valid = encoder.transform(X_valid)
+    
+    return X_train, X_valid, y_train, y_valid
 
-# Normalized, null-free datasets
-X_train_processed, y_train_processed = get_proc_df(data.train_ds)
-X_valid_processed, y_valid_processed = get_proc_df(data.valid_ds)
+X_train, X_valid, y_train, y_valid = get_proc_df(data, cat_names, cont_names)
 ```
-I then put these processed datasets through XGBoost.
+I then put these processed datasets through a variety of classifiers, each instantiated with the default values.
 
 ```python
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import RidgeClassifier, LogisticRegression
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.naive_bayes import GaussianNB, BernoulliNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import LinearSVC
+from sklearn.metrics import log_loss
+from sklearn.metrics import accuracy_score
 from xgboost import XGBClassifier
 
-modelxgb = XGBClassifier(objective = 'multi:softmax', booster = 'gbtree', 
-                         nrounds = 'min.error.idx', num_class = 3, 
-                         maximize = False, eval_metric = 'merror', eta = .1,
-                         max_depth = 14, colsample_bytree = .4, n_jobs=-1)
+classifiers = [
+    RandomForestClassifier(),
+    LogisticRegression(solver='lbfgs', multi_class='ovr', max_iter=500),
+    LinearDiscriminantAnalysis(),
+    GaussianNB(),
+    BernoulliNB(),
+    DecisionTreeClassifier(),
+    XGBClassifier(objective = 'multi:softmax', booster = 'gbtree', 
+                     nrounds = 'min.error.idx', num_class = 3, 
+                     maximize = False, eval_metric = 'logloss', eta = .1,
+                     max_depth = 14, colsample_bytree = .4, n_jobs=-1)
+]
 
-modelxgb.fit(X_train_processed, y_train_processed)
+results = pd.DataFrame(columns=["Classifier", "Accuracy"])
 
-from sklearn.metrics import accuracy_score
-y_pred = modelxgb.predict(X_valid_processed)
-score = accuracy_score(y_valid_processed, y_pred)
-score
-```
-```
-0.8181914893617022
+for clf in classifiers:
+    name = clf.__class__.__name__
+    clf.fit(X_train, y_train)
+    acc = accuracy_score(y_valid, clf.predict(X_valid))
+    
+    log_entry = pd.DataFrame([[name, acc*100]], columns=["Classifier", "Accuracy"])
+    results = results.append(log_entry)
+
+results = results.append(pd.DataFrame([['fast.ai', 79.2]], columns=["Classifier", "Accuracy"]))
+results = results.sort_values('Accuracy', ascending=False)
+
+fig, ax = plt.subplots(1,1, figsize=(6,5))
+
+ax.barh(results['Classifier'], results['Accuracy'], color="b")
+ax.tick_params(axis="y", labelsize=14)
+ax.set_xlabel('Accuracy %', fontsize=14)
+ax.set_title('Classifier Accuracy', fontsize=20);
 ```
 
-And so, at least for this dataset, XGBoost comes in at `81.8%` and beats fast.ai by a significant margin. All this goes to show the importance of testing and tuning a few different methods. 
+![Pumps](/img/6_water-pumps/pump5.png)
+
+And so, at least for this dataset, XGBoost and RandomForestClassifier beat fast.ai, in the former case by a significant margin. All this goes to show the importance of testing and tuning a few different methods. 
 
 Despite the conventional results in this particular experiment, deep learning is increasingly beig used for tabular datasets and can generate great results with relatively minimal feature engineering. Embeddings make it possible to group together similar values in even highly-cardinal categorical features. Proper use of dropout, weight decay, and other regularization methods ensure that overfitting remains in check even for huge models with lots of parameters. The applications are as varied as tabular data itself, so it'll be interesting to see how different approaches compare to each other in the future.
