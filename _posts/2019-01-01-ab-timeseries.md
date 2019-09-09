@@ -2,7 +2,7 @@
 title: Time series forecasting with Prophet and fast.ai
 subtitle: Using deep learning to improve on additive models
 image: /img/13_timeseries/time1.png
-date: 2019-01-01 01:49:30
+date: 2019-01-01 01:50:30
 ---
 
 I tested several approaches for forecasting multivariable time series, using a database of air pollution and weather in Beijing.  I created a baseline using the additive forecasting tool Prophet, compared it against a neural network with no access to historical data, and tested a strategy for adding historical data while preventing information leakage from the future.
