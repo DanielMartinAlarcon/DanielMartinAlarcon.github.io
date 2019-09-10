@@ -1,6 +1,6 @@
 ---
 title: Time series forecasting with Prophet and fast.ai
-subtitle: Using deep learning to improve on univariate regression models
+subtitle: Using deep learning and feature engineering to improve on univariate regression models
 image: /img/13_timeseries/time1.png
 date: 2019-01-01 01:50:30
 ---
